@@ -1,211 +1,491 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>ParkWise - Book Parking Slot</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<link href="css/book.css" rel="stylesheet"/>
-<script src="js/main.js"></script>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ParkWise - Book Parking Slot</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+    <script src="js/main.js"></script>
 </head>
+
 <body class="font-display bg-background-light dark:bg-background-dark">
-<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
-<div class="layout-container flex h-full grow flex-col">
-<!-- TopNavBar -->
-<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-b-[#233348] px-4 sm:px-6 lg:px-10 py-3">
-<div class="flex items-center gap-4 text-black dark:text-white">
-<div class="size-6 text-primary">
-<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-<h2 class="text-black dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">ParkWise</h2>
-</div>
-<div class="flex flex-1 justify-end items-center gap-4">
-<div class="hidden sm:flex items-center gap-6">
-<a class="text-gray-600 dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">My Bookings</a>
-<a class="text-gray-600 dark:text-gray-300 text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Help</a>
-</div>
-<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]">
-<span class="truncate">Login</span>
-</button>
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAe_TOpP1Fw70Z7rZKux22hSGlXv1klQNXUnDrnk-8iHylCZkyYjnoC6YOFzeKBg53_oyE2T_FD_LsTIW1ZQ1_jPe1W2Rq5raVFT12IegTcwraMDxa4hzTg2YVoD3B35kEEI7lcVSlNanPeo_BGKEVB7ZzhP4UUR3aIN-4Fh_AZmfgmIDiAhkAOgdnvRMGHL2Z9jPu4VVtPTYhAhPiTJbA19VXpoViwWIwFZCWYZCaWyFlLuRWLX0IAnLRSFJ_LiKZ5sdrqgy0uKMI");'></div>
-</div>
-</header>
-<main class="flex-1 px-4 sm:px-6 lg:px-10 py-8">
-<div class="mx-auto max-w-7xl">
-<!-- Page Heading -->
-<div class="mb-8">
-<p class="text-black dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Book a Parking Slot</p>
-<p class="text-gray-500 dark:text-[#92a9c9] text-base font-normal leading-normal mt-2">Select your desired date and time to find an available spot.</p>
-</div>
-<div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-<!-- Left Column: Booking Form -->
-<div class="lg:col-span-2 bg-white dark:bg-[#192433]/50 p-6 rounded-xl border border-gray-200 dark:border-[#233348] self-start">
-<div class="flex flex-col gap-6">
-<!-- Calendar -->
-<div>
-<h2 class="text-black dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">Select Date</h2>
-<div class="flex min-w-72 flex-1 flex-col gap-0.5">
-<div class="flex items-center p-1 justify-between">
-<button class="text-black dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-full p-2">
-<span class="material-symbols-outlined text-xl">chevron_left</span>
-</button>
-<p class="text-black dark:text-white text-base font-bold leading-tight flex-1 text-center">October 2024</p>
-<button class="text-black dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-full p-2">
-<span class="material-symbols-outlined text-xl">chevron_right</span>
-</button>
-</div>
-<div class="grid grid-cols-7 text-center">
-<p class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">S</p>
-<p class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">M</p>
-<p class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">T</p>
-<p class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">W</p>
-<p class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">T</p>
-<p class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">F</p>
-<p class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">S</p>
-<button class="h-12 w-full text-gray-400 dark:text-gray-500 col-start-4 text-sm font-medium leading-normal"><div class="flex size-full items-center justify-center rounded-full">1</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">2</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">3</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">4</div></button>
-<button class="h-12 w-full text-white text-sm font-medium leading-normal"><div class="flex size-full items-center justify-center rounded-full bg-primary">5</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">6</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">7</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">8</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">9</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">10</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">11</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">12</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">13</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">14</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">15</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">16</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">17</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">18</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">19</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">20</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">21</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">22</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">23</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">24</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">25</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">26</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">27</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">28</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">29</div></button>
-<button class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10"><div class="flex size-full items-center justify-center rounded-full">30</div></button>
-</div>
-</div>
-</div>
-<div class="w-full h-px bg-gray-200 dark:bg-[#233348]"></div>
-<!-- Time & Duration -->
-<div>
-<h2 class="text-black dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">Select Time &amp; Duration</h2>
-<div class="flex flex-col sm:flex-row max-w-[480px] flex-wrap items-end gap-4">
-<label class="flex flex-col min-w-40 flex-1">
-<p class="text-gray-700 dark:text-white text-base font-medium leading-normal pb-2">Start Time</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-black dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324867] bg-background-light dark:bg-[#192433] focus:border-primary dark:focus:border-primary h-14 placeholder:text-gray-500 dark:placeholder:text-[#92a9c9] p-[15px] text-base font-normal leading-normal" placeholder="10:00 AM" value=""/>
-</label>
-<label class="flex flex-col min-w-40 flex-1">
-<p class="text-gray-700 dark:text-white text-base font-medium leading-normal pb-2">End Time</p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-black dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324867] bg-background-light dark:bg-[#192433] focus:border-primary dark:focus:border-primary h-14 placeholder:text-gray-500 dark:placeholder:text-[#92a9c9] p-[15px] text-base font-normal leading-normal" placeholder="12:00 PM" value=""/>
-</label>
-</div>
-<div class="mt-4">
-<label class="text-gray-700 dark:text-white text-base font-medium leading-normal pb-2 block" for="duration">Duration</label>
-<input class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary" id="duration" max="8" min="1" type="range" value="2"/>
-<div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
-<span>1 Hr</span>
-<span>2 Hrs</span>
-<span>4 Hrs</span>
-<span>6 Hrs</span>
-<span>8 Hrs</span>
-</div>
-</div>
-</div>
-<div class="w-full h-px bg-gray-200 dark:bg-[#233348]"></div>
-<!-- Booking Summary -->
-<div>
-<h2 class="text-black dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">Booking Summary</h2>
-<div class="space-y-3 bg-gray-50 dark:bg-background-dark/80 p-4 rounded-lg">
-<div class="flex justify-between items-center">
-<p class="text-gray-600 dark:text-gray-300 font-medium">Selected Slot</p>
-<p class="text-black dark:text-white font-bold">C-04</p>
-</div>
-<div class="flex justify-between items-center">
-<p class="text-gray-600 dark:text-gray-300 font-medium">Date</p>
-<p class="text-black dark:text-white font-bold">October 5, 2024</p>
-</div>
-<div class="flex justify-between items-center">
-<p class="text-gray-600 dark:text-gray-300 font-medium">Duration</p>
-<p class="text-black dark:text-white font-bold">2 Hours (10:00 AM - 12:00 PM)</p>
-</div>
-<div class="w-full h-px bg-gray-200 dark:bg-[#233348] my-2"></div>
-<div class="flex justify-between items-center">
-<p class="text-gray-600 dark:text-gray-300 text-lg font-medium">Total Price</p>
-<p class="text-black dark:text-white text-2xl font-black">$10.00</p>
-</div>
-</div>
-<button class="w-full mt-6 flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-6 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
-<span class="truncate">Confirm Booking</span>
-</button>
-</div>
-</div>
-</div>
-<!-- Right Column: Parking Map -->
-<div class="lg:col-span-3 bg-white dark:bg-[#192433]/50 p-6 rounded-xl border border-gray-200 dark:border-[#233348]">
-<div class="flex flex-wrap justify-between items-center gap-4 mb-6">
-<div>
-<h2 class="text-black dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">Choose Your Spot</h2>
-<p class="text-green-500 font-semibold mt-1">15 Slots Available</p>
-</div>
-<div class="flex items-center gap-4 text-sm">
-<div class="flex items-center gap-2"><div class="size-4 rounded bg-green-500/20 dark:bg-green-500/30 border border-green-500"></div><span class="text-gray-600 dark:text-gray-300">Available</span></div>
-<div class="flex items-center gap-2"><div class="size-4 rounded bg-red-500/20 dark:bg-red-500/30 border border-red-500"></div><span class="text-gray-600 dark:text-gray-300">Occupied</span></div>
-<div class="flex items-center gap-2"><div class="size-4 rounded bg-primary border border-primary"></div><span class="text-gray-600 dark:text-gray-300">Selected</span></div>
-</div>
-</div>
-<div class="bg-gray-100 dark:bg-background-dark/80 p-4 rounded-lg aspect-[4/3] flex flex-col items-center justify-center">
-<div class="grid grid-cols-7 gap-2 w-full max-w-2xl text-center text-xs font-semibold text-gray-600 dark:text-gray-400">
-<!-- Aisle Text -->
-<div class="col-span-7 h-8 flex items-center justify-center text-gray-400 dark:text-gray-500 uppercase tracking-widest">Entrance</div>
-<!-- Row C -->
-<div class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">C-01</div>
-<div class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">C-02</div>
-<div class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">C-03</div>
-<div class="bg-primary border border-primary text-white rounded p-2 flex items-center justify-center cursor-pointer">C-04</div>
-<div class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">C-05</div>
-<div class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">C-06</div>
-<div class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">C-07</div>
-<!-- Aisle -->
-<div class="col-span-7 h-8"></div>
-<!-- Row B -->
-<div class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">B-01</div>
-<div class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">B-02</div>
-<div class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">B-03</div>
-<div class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">B-04</div>
-<div class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">B-05</div>
-<div class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">B-06</div>
-<div class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">B-07</div>
-<!-- Aisle -->
-<div class="col-span-7 h-8"></div>
-<!-- Row A -->
-<div class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">A-01</div>
-<div class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">A-02</div>
-<div class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">A-03</div>
-<div class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">A-04</div>
-<div class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">A-05</div>
-<div class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">A-06</div>
-<div class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">A-07</div>
-<div class="col-span-7 h-8 flex items-center justify-center text-gray-400 dark:text-gray-500 uppercase tracking-widest">Exit</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</main>
-</div>
-</div>
-</body></html>
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <div class="flex flex-1 justify-center p-4 sm:p-6 lg:p-8">
+                <div class="layout-content-container flex w-full max-w-7xl flex-1 flex-col">
+                    <!-- TopNavBar -->
+                    <header
+                        class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-b-[#233348] px-4 py-3 sm:px-6">
+                        <div class="flex items-center gap-4 text-gray-800 dark:text-white">
+                            <div class="size-6 text-primary">
+                                <span class="material-symbols-outlined text-4xl">local_parking</span>
+                            </div>
+                            <h1
+                                class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">
+                                Parking Management</h1>
+                        </div>
+                        <div class="hidden md:flex flex-1 justify-center gap-8">
+                            <div class="flex items-center gap-9">
+                                <a class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal"
+                                    href="index.html">Dashboard</a>
+                                <a class="text-gray-900 dark:text-white text-sm font-medium leading-normal"
+                                    href="book.html">Book a Slot</a>
+                                <a class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal"
+                                    href="profile.html">My Profile</a>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button id="theme-toggle"
+                                class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 w-10 bg-gray-100 dark:bg-[#233348] text-gray-600 dark:text-white text-sm font-bold leading-normal tracking-[0.015em]">
+                                <span class="material-symbols-outlined dark:hidden">light_mode</span>
+                                <span class="material-symbols-outlined hidden dark:block">dark_mode</span>
+                            </button>
+                            <a href="login.html"
+                                class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                                data-alt="User profile picture, abstract gradient"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDZvDFmjNL9GhK1a__Q2Ki13IOrMe4wsSpiSBBEGXbikZ8_W3_tdR3g84Vh9EDInwzxgFXjhbZfHrXvEp4ch7eNqJB7MKm75vRv-9DdM13VMQgtQwxjobAOJfwpxGihgqCRZca26Uahmpx3dzbKgntC1dDLg_ZIWDwu2zU6bo3wv6x9C6kMelxtymcBmjIRtS1Q0DFL4-wZ1S2GS-NAp699fUL_xBiae2--h_lWdEgf0JBJ9FzCC8L7lVsFafaBsClGdd7TqfuOwew");'></a>
+                        </div>
+                    </header>
+                    <main class="flex-1 py-6">
+                        <!-- Page Heading -->
+                        <div class="flex flex-wrap items-center justify-between gap-4 p-4">
+                            <p
+                                class="text-gray-900 dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">
+                                Book a Parking Slot</p>
+                            <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span class="material-symbols-outlined text-base">update</span>
+                                <span>Last updated: just now</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 p-4">
+                            <!-- Left Column: Booking Form -->
+                            <div
+                                class="lg:col-span-2 bg-white dark:bg-[#192433]/50 p-6 rounded-xl border border-gray-200 dark:border-[#233348] self-start">
+                                <div class="flex flex-col gap-6">
+                                    <!-- Calendar -->
+                                    <div>
+                                        <h2
+                                            class="text-black dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
+                                            Select Date</h2>
+                                        <div class="flex min-w-72 flex-1 flex-col gap-0.5">
+                                            <div class="flex items-center p-1 justify-between">
+                                                <button
+                                                    class="text-black dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-full p-2">
+                                                    <span class="material-symbols-outlined text-xl">chevron_left</span>
+                                                </button>
+                                                <p
+                                                    class="text-black dark:text-white text-base font-bold leading-tight flex-1 text-center">
+                                                    October 2024</p>
+                                                <button
+                                                    class="text-black dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-full p-2">
+                                                    <span class="material-symbols-outlined text-xl">chevron_right</span>
+                                                </button>
+                                            </div>
+                                            <div class="grid grid-cols-7 text-center">
+                                                <p
+                                                    class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">
+                                                    S</p>
+                                                <p
+                                                    class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">
+                                                    M</p>
+                                                <p
+                                                    class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">
+                                                    T</p>
+                                                <p
+                                                    class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">
+                                                    W</p>
+                                                <p
+                                                    class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">
+                                                    T</p>
+                                                <p
+                                                    class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">
+                                                    F</p>
+                                                <p
+                                                    class="text-gray-500 dark:text-white text-[13px] font-bold leading-normal tracking-[0.015em] flex h-12 w-full items-center justify-center pb-0.5">
+                                                    S</p>
+                                                <button
+                                                    class="h-12 w-full text-gray-400 dark:text-gray-500 col-start-4 text-sm font-medium leading-normal">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        1</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        2</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        3</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        4</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-white text-sm font-medium leading-normal">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full bg-primary">
+                                                        5</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        6</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        7</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        8</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        9</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        10</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        11</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        12</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        13</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        14</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        15</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        16</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        17</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        18</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        19</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        20</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        21</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        22</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        23</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        24</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        25</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        26</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        27</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        28</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        29</div>
+                                                </button>
+                                                <button
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
+                                                    <div
+                                                        class="flex size-full items-center justify-center rounded-full">
+                                                        30</div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="w-full h-px bg-gray-200 dark:bg-[#233348]"></div>
+                                    <!-- Time & Duration -->
+                                    <div>
+                                        <h2
+                                            class="text-black dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
+                                            Select Time &amp; Duration</h2>
+                                        <div class="flex flex-col sm:flex-row max-w-[480px] flex-wrap items-end gap-4">
+                                            <label class="flex flex-col min-w-40 flex-1">
+                                                <p
+                                                    class="text-gray-700 dark:text-white text-base font-medium leading-normal pb-2">
+                                                    Start Time</p>
+                                                <input
+                                                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-black dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324867] bg-background-light dark:bg-[#192433] focus:border-primary dark:focus:border-primary h-14 placeholder:text-gray-500 dark:placeholder:text-[#92a9c9] p-[15px] text-base font-normal leading-normal"
+                                                    placeholder="10:00 AM" value="" />
+                                            </label>
+                                            <label class="flex flex-col min-w-40 flex-1">
+                                                <p
+                                                    class="text-gray-700 dark:text-white text-base font-medium leading-normal pb-2">
+                                                    End Time</p>
+                                                <input
+                                                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-black dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324867] bg-background-light dark:bg-[#192433] focus:border-primary dark:focus:border-primary h-14 placeholder:text-gray-500 dark:placeholder:text-[#92a9c9] p-[15px] text-base font-normal leading-normal"
+                                                    placeholder="12:00 PM" value="" />
+                                            </label>
+                                        </div>
+                                        <div class="mt-4">
+                                            <label
+                                                class="text-gray-700 dark:text-white text-base font-medium leading-normal pb-2 block"
+                                                for="duration">Duration</label>
+                                            <input
+                                                class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary"
+                                                id="duration" max="8" min="1" type="range" value="2" />
+                                            <div
+                                                class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                <span>1 Hr</span>
+                                                <span>2 Hrs</span>
+                                                <span>4 Hrs</span>
+                                                <span>6 Hrs</span>
+                                                <span>8 Hrs</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="w-full h-px bg-gray-200 dark:bg-[#233348]"></div>
+                                    <!-- Booking Summary -->
+                                    <div>
+                                        <h2
+                                            class="text-black dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
+                                            Booking Summary</h2>
+                                        <div class="space-y-3 bg-gray-50 dark:bg-background-dark/80 p-4 rounded-lg">
+                                            <div class="flex justify-between items-center">
+                                                <p class="text-gray-600 dark:text-gray-300 font-medium">Selected Slot
+                                                </p>
+                                                <p class="text-black dark:text-white font-bold">C-04</p>
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <p class="text-gray-600 dark:text-gray-300 font-medium">Date</p>
+                                                <p class="text-black dark:text-white font-bold">October 5, 2024</p>
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <p class="text-gray-600 dark:text-gray-300 font-medium">Duration</p>
+                                                <p class="text-black dark:text-white font-bold">2 Hours (10:00 AM -
+                                                    12:00 PM)</p>
+                                            </div>
+                                            <div class="w-full h-px bg-gray-200 dark:bg-[#233348] my-2"></div>
+                                            <div class="flex justify-between items-center">
+                                                <p class="text-gray-600 dark:text-gray-300 text-lg font-medium">Total
+                                                    Price</p>
+                                                <p class="text-black dark:text-white text-2xl font-black">$10.00</p>
+                                            </div>
+                                        </div>
+                                        <button
+                                            class="w-full mt-6 flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-6 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
+                                            <span class="truncate">Confirm Booking</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Right Column: Parking Map -->
+                            <div
+                                class="lg:col-span-3 bg-white dark:bg-[#192433]/50 p-6 rounded-xl border border-gray-200 dark:border-[#233348]">
+                                <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+                                    <div>
+                                        <h2
+                                            class="text-black dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">
+                                            Choose Your Spot</h2>
+                                        <p class="text-green-500 font-semibold mt-1">15 Slots Available</p>
+                                    </div>
+                                    <div class="flex items-center gap-4 text-sm">
+                                        <div class="flex items-center gap-2">
+                                            <div
+                                                class="size-4 rounded bg-green-500/20 dark:bg-green-500/30 border border-green-500">
+                                            </div><span class="text-gray-600 dark:text-gray-300">Available</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <div
+                                                class="size-4 rounded bg-red-500/20 dark:bg-red-500/30 border border-red-500">
+                                            </div><span class="text-gray-600 dark:text-gray-300">Occupied</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <div class="size-4 rounded bg-primary border border-primary"></div><span
+                                                class="text-gray-600 dark:text-gray-300">Selected</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="bg-gray-100 dark:bg-background-dark/80 p-4 rounded-lg aspect-[4/3] flex flex-col items-center justify-center">
+                                    <div
+                                        class="grid grid-cols-7 gap-2 w-full max-w-2xl text-center text-xs font-semibold text-gray-600 dark:text-gray-400">
+                                        <!-- Aisle Text -->
+                                        <div
+                                            class="col-span-7 h-8 flex items-center justify-center text-gray-400 dark:text-gray-500 uppercase tracking-widest">
+                                            Entrance</div>
+                                        <!-- Row C -->
+                                        <div
+                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
+                                            C-01</div>
+                                        <div
+                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
+                                            C-02</div>
+                                        <div
+                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
+                                            C-03</div>
+                                        <div
+                                            class="bg-primary border border-primary text-white rounded p-2 flex items-center justify-center cursor-pointer">
+                                            C-04</div>
+                                        <div
+                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
+                                            C-05</div>
+                                        <div
+                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
+                                            C-06</div>
+                                        <div
+                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
+                                            C-07</div>
+                                        <!-- Aisle -->
+                                        <div class="col-span-7 h-8"></div>
+                                        <!-- Row B -->
+                                        <div
+                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
+                                            B-01</div>
+                                        <div
+                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
+                                            B-02</div>
+                                        <div
+                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
+                                            B-03</div>
+                                        <div
+                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
+                                            B-04</div>
+                                        <div
+                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
+                                            B-05</div>
+                                        <div
+                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
+                                            B-06</div>
+                                        <div
+                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
+                                            B-07</div>
+                                        <!-- Aisle -->
+                                        <div class="col-span-7 h-8"></div>
+                                        <!-- Row A -->
+                                        <div
+                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
+                                            A-01</div>
+                                        <div
+                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
+                                            A-02</div>
+                                        <div
+                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
+                                            A-03</div>
+                                        <div
+                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
+                                            A-04</div>
+                                        <div
+                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
+                                            A-05</div>
+                                        <div
+                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
+                                            A-06</div>
+                                        <div
+                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
+                                            A-07</div>
+                                        <div
+                                            class="col-span-7 h-8 flex items-center justify-center text-gray-400 dark:text-gray-500 uppercase tracking-widest">
+                                            Exit</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                </main>
+            </div>
+        </div>
+</body>
+
+</html>
