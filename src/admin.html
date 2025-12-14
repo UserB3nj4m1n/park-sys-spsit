@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Dashboard Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="js/main.js"></script>
+<link href="css/admin.css" rel="stylesheet"/>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex min-h-screen w-full flex-row">
+<!-- SideNavBar -->
+<aside class="flex h-screen w-64 flex-col bg-white dark:bg-background-dark/50 border-r border-gray-200 dark:border-white/10 sticky top-0">
+<div class="flex h-full flex-col justify-between p-4">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3 p-2">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="ParkRight company logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDCt_g0QYQlV5Iy3QYsCzsMEjPfloMtFLNQTA7MgbK7FB4m7M2Eg9oyvw1O_jNAM-FpVFFDTZPn4HitajZjBjw5ojklEHnrUTNc73JBhEWsNtjKVLOPwZeMZkT58uO5dL_dT54tUkRZXiQYVcUhdFj7odABvnjFlEcUI5CBPUgdL8IGfZy2CZ3OYUKd42TlNOizN_MyuIwgIYY8rRWTUr5CwWIvPnSUAyTV9kkMBNpYOxq9nNk_DQEVmCqxMa2tHWKYyQEdG2H4F7g");'></div>
+<div class="flex flex-col">
+<h1 class="text-gray-900 dark:text-white text-base font-bold leading-normal">ParkRight</h1>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Management</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 dark:bg-primary/20" href="admin.html">
+<span class="material-symbols-outlined text-primary text-2xl">dashboard</span>
+<p class="text-primary text-sm font-bold leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors" href="admin_users.html">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">group</span>
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Users</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors" href="admin_slots.html">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">local_parking</span>
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Parking Slots</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">book_online</span>
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Bookings</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">settings</span>
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Settings</p>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-1 border-t border-gray-200 dark:border-white/10 pt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">logout</span>
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Logout</p>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto">
+<div class="p-8">
+<!-- PageHeading -->
+<div class="flex flex-wrap items-center justify-between gap-4">
+<h1 class="text-gray-900 dark:text-white text-3xl font-bold leading-tight tracking-[-0.03em] min-w-72">Dashboard Overview</h1>
+<div class="flex items-center gap-4">
+<!-- Chips -->
+<div class="flex gap-2">
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary text-white pl-4 pr-3">
+<p class="text-sm font-medium leading-normal">Last 24 Hours</p>
+<span class="material-symbols-outlined text-base">expand_more</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-white/10 pl-4 pr-3 border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/20 transition-colors">
+<p class="text-gray-700 dark:text-white text-sm font-medium leading-normal">Custom Range</p>
+</button>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="truncate">Add New Booking</span>
+</button>
+</div>
+</div>
+<!-- Stats -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-background-dark/50 border border-gray-200 dark:border-white/10">
+<p class="text-gray-500 dark:text-gray-400 text-base font-medium leading-normal">Total Parking Slots</p>
+<p class="text-gray-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">250</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-background-dark/50 border border-gray-200 dark:border-white/10">
+<p class="text-gray-500 dark:text-gray-400 text-base font-medium leading-normal">Occupied Slots</p>
+<div class="flex items-baseline gap-2">
+<p class="text-gray-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">182</p>
+<p class="text-green-500 text-sm font-bold leading-normal">+5%</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-background-dark/50 border border-gray-200 dark:border-white/10">
+<p class="text-gray-500 dark:text-gray-400 text-base font-medium leading-normal">Available Slots</p>
+<div class="flex items-baseline gap-2">
+<p class="text-gray-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">68</p>
+<p class="text-red-500 text-sm font-bold leading-normal">-12%</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-background-dark/50 border border-gray-200 dark:border-white/10">
+<p class="text-gray-500 dark:text-gray-400 text-base font-medium leading-normal">Total Revenue (Today)</p>
+<div class="flex items-baseline gap-2">
+<p class="text-gray-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">$1,250</p>
+<p class="text-green-500 text-sm font-bold leading-normal">+8%</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+<!-- Recent Activity Section -->
+<div class="lg:col-span-2">
+<h2 class="text-gray-900 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em] mb-4">Recent Activity</h2>
+<div class="w-full bg-white dark:bg-background-dark/50 rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-gray-50 dark:bg-white/5">
+<tr>
+<th class="px-6 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Booking ID</th>
+<th class="px-6 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Vehicle</th>
+<th class="px-6 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Slot #</th>
+<th class="px-6 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Arrival Time</th>
+<th class="px-6 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-200 dark:divide-white/10">
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">#B7C8F2</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">ABC-1234</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">A-12</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">10:30 AM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-500/20 text-green-800 dark:text-green-300">Checked-in</span>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">#A9D4E1</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">XYZ-5678</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">B-05</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">10:15 AM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-500/20 text-green-800 dark:text-green-300">Checked-in</span>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">#C3B8F9</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">LMN-9012</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">C-21</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">09:55 AM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-500/20 text-yellow-800 dark:text-yellow-300">Reserved</span>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">#D1E2F3</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">PQR-3456</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">A-08</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">09:40 AM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-500/20 text-red-800 dark:text-red-300">Checked-out</span>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">#F5G6H7</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">JKL-7890</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">D-01</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">09:21 AM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-500/20 text-green-800 dark:text-green-300">Checked-in</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Live Occupancy Section -->
+<div class="lg:col-span-1">
+<h2 class="text-gray-900 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em] mb-4">Live Occupancy</h2>
+<div class="flex flex-col items-center justify-center p-6 bg-white dark:bg-background-dark/50 rounded-xl border border-gray-200 dark:border-white/10 h-[calc(100%-40px)]">
+<div class="relative size-48">
+<svg class="size-full" height="36" viewbox="0 0 36 36" width="36" xmlns="http://www.w3.org/2000/svg">
+<circle class="stroke-gray-200 dark:stroke-white/10" cx="18" cy="18" fill="none" r="15.9154943092" stroke-width="3"></circle>
+<circle class="stroke-primary" cx="18" cy="18" fill="none" r="15.9154943092" stroke-dasharray="72.8, 100" stroke-linecap="round" stroke-width="3" transform="rotate(-90 18 18)"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-bold text-gray-900 dark:text-white">73%</span>
+<span class="text-sm text-gray-500 dark:text-gray-400">Occupied</span>
+</div>
+</div>
+<div class="flex justify-between w-full mt-6 text-sm">
+<div class="flex items-center gap-2">
+<div class="size-3 rounded-full bg-primary"></div>
+<div>
+<p class="text-gray-500 dark:text-gray-400">Occupied</p>
+<p class="font-bold text-gray-800 dark:text-white">182 slots</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="size-3 rounded-full bg-gray-200 dark:bg-white/10"></div>
+<div>
+<p class="text-gray-500 dark:text-gray-400">Available</p>
+<p class="font-bold text-gray-800 dark:text-white">68 slots</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

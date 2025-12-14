@@ -1,0 +1,3 @@
+- Add interactivity to the pages using JavaScript.
+- Add automated tests to the project.
+- Review and potentially remove the 'soc lepsie.docx' file.

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Login/Registration - Parking Management System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="css/login.css" rel="stylesheet"/>
+<script src="js/main.js"></script>
+</head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<div class="flex flex-1 justify-center items-stretch">
+<div class="flex flex-col w-full max-w-7xl mx-auto lg:flex-row">
+<!-- Left Column: Visual/Branding -->
+<div class="flex flex-col justify-center items-start w-full lg:w-1/2 p-8 lg:p-12 relative">
+<div class="absolute top-8 left-8 lg:top-12 lg:left-12 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-4xl">local_parking</span>
+<h1 class="text-2xl font-bold text-slate-800 dark:text-white">ParkWise</h1>
+</div>
+<div class="flex flex-col gap-6 max-w-md my-auto">
+<div class="w-full gap-1 overflow-hidden bg-transparent @[480px]:gap-2 aspect-[4/3] flex rounded-xl">
+<div class="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-xl flex-1" data-alt="Abstract image of a modern city skyline at night with light trails from traffic" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuASkbs4hX8CdvPuAlIlZyEVZMqSB6hi4DR6fq5_AjuRLbR7SXIYq-7tp7nOsEdVYQ28MvKBEF-TBU9vrG2RDO_W6fg1yGnpWqXdp3eAgErBhYBWN2EOcgE3iXV_V8D4PQyWY2VbGjkEw74O3oCwjt83OSdq02C2K-D-qHqzF8IV180p5FBnxWj3dwIScThZtOIZT5V9A_BGmvbBRLgQQfSaeZ1zV2SmOh2hBTiMYoM6ZOztiogOW_3URXOh4AN6ZvfI8DleeB3yF8k");'></div>
+</div>
+<h2 class="text-4xl font-black text-slate-900 dark:text-white leading-tight tracking-[-0.03em]">Smart Parking, Simplified.</h2>
+<p class="text-base text-slate-600 dark:text-[#92a9c9]">Manage your parking spaces efficiently and effortlessly with our intelligent platform.</p>
+</div>
+</div>
+<!-- Right Column: Form Area -->
+<div class="flex flex-col justify-center w-full lg:w-1/2 p-8 lg:p-12 bg-white dark:bg-[#111822]">
+<div class="flex flex-col w-full max-w-md mx-auto gap-8">
+<div class="flex flex-col gap-3">
+<p class="text-slate-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Welcome Back</p>
+<p class="text-slate-600 dark:text-[#92a9c9] text-base font-normal leading-normal">Sign in to access your parking management dashboard.</p>
+</div>
+<div class="flex">
+<div class="flex h-10 flex-1 items-center justify-center rounded-lg bg-slate-200 dark:bg-[#233348] p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-[#101822] has-[:checked]:shadow-sm has-[:checked]:text-slate-900 dark:has-[:checked]:text-white text-slate-500 dark:text-[#92a9c9] text-sm font-medium leading-normal transition-colors">
+<span class="truncate">Sign In</span>
+<input checked="" class="invisible w-0" name="auth-toggle" type="radio" value="Sign In"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-[#101822] has-[:checked]:shadow-sm has-[:checked]:text-slate-900 dark:has-[:checked]:text-white text-slate-500 dark:text-[#92a9c9] text-sm font-medium leading-normal transition-colors">
+<span class="truncate">Register</span>
+<input class="invisible w-0" name="auth-toggle" type="radio" value="Register"/>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<label class="flex flex-col flex-1">
+<p class="text-slate-800 dark:text-white text-sm font-medium leading-normal pb-2">Email Address</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-[#324867] bg-background-light dark:bg-[#192433] focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-[#92a9c9] p-3 text-base font-normal leading-normal" placeholder="Enter your email" type="email" value=""/>
+</label>
+<label class="flex flex-col flex-1">
+<div class="flex justify-between items-baseline pb-2">
+<p class="text-slate-800 dark:text-white text-sm font-medium leading-normal">Password</p>
+<a class="text-sm font-medium text-primary hover:underline" href="#">Forgot Password?</a>
+</div>
+<div class="flex w-full flex-1 items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-[#324867] bg-background-light dark:bg-[#192433] focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-[#92a9c9] p-3 rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal" placeholder="Enter your password" type="password" value=""/>
+<button aria-label="Toggle password visibility" class="text-slate-500 dark:text-[#92a9c9] flex border border-slate-300 dark:border-[#324867] bg-background-light dark:bg-[#192433] items-center justify-center px-3 rounded-r-lg border-l-0 hover:text-slate-700 dark:hover:text-white">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</label>
+</div>
+<div class="flex flex-col gap-4">
+<button class="flex items-center justify-center h-12 px-6 rounded-lg bg-primary text-white text-base font-bold w-full hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background-light dark:focus:ring-offset-background-dark transition-colors">Sign In</button>
+<button class="flex items-center justify-center h-12 px-6 rounded-lg bg-slate-200 dark:bg-[#233348] text-slate-800 dark:text-white text-base font-bold w-full hover:bg-slate-300 dark:hover:bg-[#324867] focus:outline-none focus:ring-2 focus:ring-slate-400/50 focus:ring-offset-2 focus:ring-offset-background-light dark:focus:ring-offset-background-dark transition-colors gap-3">
+<svg class="h-5 w-5" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.578 12.27c0-.79-.07-1.54-.2-2.27h-9.87v4.19h5.62c-.25 1.35-.97 2.5-2.14 3.29v2.71h3.47c2.03-1.87 3.2-4.63 3.2-7.92Z" fill="#4285F4"></path>
+<path d="M12.508 23c2.76 0 5.07-0.91 6.76-2.47l-3.47-2.71c-.91.61-2.08.97-3.29.97-2.53 0-4.67-1.71-5.44-4.02H3.508v2.79c1.61 3.2 4.79 5.44 8.5 5.44Z" fill="#34A853"></path>
+<path d="M7.068 14.73c-.17-.52-.27-1.07-.27-1.64s.1-1.12.27-1.64V8.66h-3.56c-.7 1.39-1.11 2.97-1.11 4.63s.41 3.24 1.11 4.63l3.56-2.79Z" fill="#FBBC05"></path>
+<path d="M12.508 6.28c1.48 0 2.85.51 3.91 1.54l3.09-3.09C17.568 2.88 15.268 1.5 12.508 1.5c-3.71 0-6.89 2.24-8.5 5.44l3.56 2.79c.77-2.31 2.91-4.02 5.44-4.02Z" fill="#EA4335"></path>
+</svg>
+<span>Sign in with Google</span>
+</button>
+</div>
+<div class="flex justify-center mt-4">
+<p class="text-sm text-slate-500 dark:text-slate-400">
+                                    By signing in, you agree to our <a class="font-medium text-primary hover:underline" href="#">Terms of Service</a> and <a class="font-medium text-primary hover:underline" href="#">Privacy Policy</a>.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>
