@@ -18,13 +18,19 @@
         </div>
     </div>
     <div class="flex items-center gap-2">
-        <button id="theme-toggle"
-            class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 w-10 bg-gray-100 dark:bg-[#233348] text-gray-600 dark:text-white text-sm font-bold leading-normal tracking-[0.015em]">
-            <span class="material-symbols-outlined dark:hidden">light_mode</span>
-            <span class="material-symbols-outlined hidden dark:block">dark_mode</span>
-        </button>
-        <a href="login.html" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-            data-alt="User profile picture, abstract gradient"
-            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDZvDFmjNL9GhK1a__Q2Ki13IOrMe4wsSpiSBBEGXbikZ8_W3_tdR3g84Vh9EDInwzxgFXjhbZfHrXvEp4ch7eNqJB7MKm75vRv-9DdM13VMQgtQwxjobAOJfwpxGihgqCRZca26Uahmpx3dzbKgntC1dDLg_ZIWDwu2zU6bo3wv6x9C6kMelxtymcBmjIRtS1Q0DFL4-wZ1S2GS-NAp699fUL_xBiae2--h_lWdEgf0JBJ9FzCC8L7lVsFafaBsClGdd7TqfuOwew");'></a>
-    </div>
+<button id="theme-toggle"
+    class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 w-10 bg-gray-100 dark:bg-[#233348] text-gray-600 dark:text-white text-sm font-bold leading-normal tracking-[0.015em]">
+    <span class="material-symbols-outlined dark:hidden">light_mode</span>
+    <span class="material-symbols-outlined hidden dark:block">dark_mode</span>
+</button>
+<div id="user-info" class="hidden items-center gap-2">
+    <span id="user-name" class="text-gray-900 dark:text-white text-sm font-medium leading-normal"></span>
+    <button id="logout-button" class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 w-10 bg-gray-100 dark:bg-[#233348] text-gray-600 dark:text-white text-sm font-bold leading-normal tracking-[0.015em]">
+        <span class="material-symbols-outlined">logout</span>
+    </button>
+</div>
+<a id="login-button" href="login.html" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+    data-alt="User profile picture, abstract gradient"
+    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDZvDFmjNL9GhK1a__Q2Ki13IOrMe4wsSpiSBBEGXbikZ8_W3_tdR3g84Vh9EDInwzxgFXjhbZfHrXvEp4ch7eNqJB7MKm75vRv-9DdM13VMQgtQwxjobAOJfwpxGihgqCRZca26Uahmpx3dzbKgntC1dDLg_ZIWDwu2zU6bo3wv6x9C6kMelxtymcBmjIRtS1Q0DFL4-wZ1S2GS-NAp699fUL_xBiae2--h_lWdEgf0JBJ9FzCC8L7lVsFafaBsClGdd7TqfuOwew");'></a>
+</div>
 </header>
