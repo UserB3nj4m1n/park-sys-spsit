@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en">
+<html lang="en">
 
 <head>
     <meta charset="utf-8" />
@@ -14,46 +14,19 @@
         rel="stylesheet" />
     <link href="css/main.css" rel="stylesheet" />
     <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/book.js"></script>
 </head>
 
 <body class="font-display bg-background-light dark:bg-background-dark">
+    <div id="navbar-placeholder"></div>
     <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
         <div class="layout-container flex h-full grow flex-col">
             <div class="flex flex-1 justify-center p-4 sm:p-6 lg:p-8">
                 <div class="layout-content-container flex w-full max-w-7xl flex-1 flex-col">
-                    <!-- TopNavBar -->
-                    <header
-                        class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-b-[#233348] px-4 py-3 sm:px-6">
-                        <div class="flex items-center gap-4 text-gray-800 dark:text-white">
-                            <div class="size-6 text-primary">
-                                <span class="material-symbols-outlined text-4xl">local_parking</span>
-                            </div>
-                            <h1
-                                class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">
-                                Parking Management</h1>
-                        </div>
-                        <div class="hidden md:flex flex-1 justify-center gap-8">
-                            <div class="flex items-center gap-9">
-                                <a class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal"
-                                    href="index.html">Dashboard</a>
-                                <a class="text-gray-900 dark:text-white text-sm font-medium leading-normal"
-                                    href="book.html">Book a Slot</a>
-                                <a class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal"
-                                    href="profile.html">My Profile</a>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <button id="theme-toggle"
-                                class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 w-10 bg-gray-100 dark:bg-[#233348] text-gray-600 dark:text-white text-sm font-bold leading-normal tracking-[0.015em]">
-                                <span class="material-symbols-outlined dark:hidden">light_mode</span>
-                                <span class="material-symbols-outlined hidden dark:block">dark_mode</span>
-                            </button>
-                            <a href="login.html"
-                                class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-                                data-alt="User profile picture, abstract gradient"
-                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDZvDFmjNL9GhK1a__Q2Ki13IOrMe4wsSpiSBBEGXbikZ8_W3_tdR3g84Vh9EDInwzxgFXjhbZfHrXvEp4ch7eNqJB7MKm75vRv-9DdM13VMQgtQwxjobAOJfwpxGihgqCRZca26Uahmpx3dzbKgntC1dDLg_ZIWDwu2zU6bo3wv6x9C6kMelxtymcBmjIRtS1Q0DFL4-wZ1S2GS-NAp699fUL_xBiae2--h_lWdEgf0JBJ9FzCC8L7lVsFafaBsClGdd7TqfuOwew");'></a>
-                        </div>
-                    </header>
+                    
                     <main class="flex-1 py-6">
                         <!-- Page Heading -->
                         <div class="flex flex-wrap items-center justify-between gap-4 p-4">
@@ -136,9 +109,9 @@
                                                         4</div>
                                                 </button>
                                                 <button
-                                                    class="h-12 w-full text-white text-sm font-medium leading-normal">
+                                                    class="h-12 w-full text-black dark:text-white text-sm font-medium leading-normal hover:bg-gray-100 dark:hover:bg-white/10">
                                                     <div
-                                                        class="flex size-full items-center justify-center rounded-full bg-primary">
+                                                        class="flex size-full items-center justify-center rounded-full">
                                                         5</div>
                                                 </button>
                                                 <button
@@ -345,22 +318,22 @@
                                             <div class="flex justify-between items-center">
                                                 <p class="text-gray-600 dark:text-gray-300 font-medium">Selected Slot
                                                 </p>
-                                                <p class="text-black dark:text-white font-bold">C-04</p>
+                                                <p id="summary-slot" class="text-black dark:text-white font-bold">C-04</p>
                                             </div>
                                             <div class="flex justify-between items-center">
                                                 <p class="text-gray-600 dark:text-gray-300 font-medium">Date</p>
-                                                <p class="text-black dark:text-white font-bold">October 5, 2024</p>
+                                                <p id="summary-date" class="text-black dark:text-white font-bold">October 5, 2024</p>
                                             </div>
                                             <div class="flex justify-between items-center">
                                                 <p class="text-gray-600 dark:text-gray-300 font-medium">Duration</p>
-                                                <p class="text-black dark:text-white font-bold">2 Hours (10:00 AM -
+                                                <p id="summary-duration" class="text-black dark:text-white font-bold">2 Hours (10:00 AM -
                                                     12:00 PM)</p>
                                             </div>
                                             <div class="w-full h-px bg-gray-200 dark:bg-[#233348] my-2"></div>
                                             <div class="flex justify-between items-center">
                                                 <p class="text-gray-600 dark:text-gray-300 text-lg font-medium">Total
                                                     Price</p>
-                                                <p class="text-black dark:text-white text-2xl font-black">$10.00</p>
+                                                <p id="summary-price" class="text-black dark:text-white text-2xl font-black">$10.00</p>
                                             </div>
                                         </div>
                                         <button
@@ -371,7 +344,7 @@
                                 </div>
                             </div>
                             <!-- Right Column: Parking Map -->
-                            <div
+                            <div id="parking-map-container"
                                 class="lg:col-span-3 bg-white dark:bg-[#192433]/50 p-6 rounded-xl border border-gray-200 dark:border-[#233348]">
                                 <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
                                     <div>
@@ -399,82 +372,13 @@
                                 </div>
                                 <div
                                     class="bg-gray-100 dark:bg-background-dark/80 p-4 rounded-lg aspect-[4/3] flex flex-col items-center justify-center">
-                                    <div
+                                    <div id="parking-map"
                                         class="grid grid-cols-7 gap-2 w-full max-w-2xl text-center text-xs font-semibold text-gray-600 dark:text-gray-400">
                                         <!-- Aisle Text -->
                                         <div
                                             class="col-span-7 h-8 flex items-center justify-center text-gray-400 dark:text-gray-500 uppercase tracking-widest">
                                             Entrance</div>
-                                        <!-- Row C -->
-                                        <div
-                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
-                                            C-01</div>
-                                        <div
-                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
-                                            C-02</div>
-                                        <div
-                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
-                                            C-03</div>
-                                        <div
-                                            class="bg-primary border border-primary text-white rounded p-2 flex items-center justify-center cursor-pointer">
-                                            C-04</div>
-                                        <div
-                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
-                                            C-05</div>
-                                        <div
-                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
-                                            C-06</div>
-                                        <div
-                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
-                                            C-07</div>
-                                        <!-- Aisle -->
-                                        <div class="col-span-7 h-8"></div>
-                                        <!-- Row B -->
-                                        <div
-                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
-                                            B-01</div>
-                                        <div
-                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
-                                            B-02</div>
-                                        <div
-                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
-                                            B-03</div>
-                                        <div
-                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
-                                            B-04</div>
-                                        <div
-                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
-                                            B-05</div>
-                                        <div
-                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
-                                            B-06</div>
-                                        <div
-                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
-                                            B-07</div>
-                                        <!-- Aisle -->
-                                        <div class="col-span-7 h-8"></div>
-                                        <!-- Row A -->
-                                        <div
-                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
-                                            A-01</div>
-                                        <div
-                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
-                                            A-02</div>
-                                        <div
-                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
-                                            A-03</div>
-                                        <div
-                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
-                                            A-04</div>
-                                        <div
-                                            class="bg-red-500/20 dark:bg-red-500/30 border border-red-500 text-red-700 dark:text-red-400 rounded p-2 flex items-center justify-center">
-                                            A-05</div>
-                                        <div
-                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
-                                            A-06</div>
-                                        <div
-                                            class="bg-green-500/20 dark:bg-green-500/30 border border-green-500 text-green-700 dark:text-green-400 rounded p-2 flex items-center justify-center cursor-pointer hover:bg-green-500/40">
-                                            A-07</div>
+                                        <!-- Parking spots will be dynamically inserted here -->
                                         <div
                                             class="col-span-7 h-8 flex items-center justify-center text-gray-400 dark:text-gray-500 uppercase tracking-widest">
                                             Exit</div>

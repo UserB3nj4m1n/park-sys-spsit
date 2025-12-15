@@ -5,3 +5,8 @@
     'GRAD' 0,
     'opsz' 24
 }
+
+#navbar-placeholder a.active {
+    color: rgb(29 78 216);
+    font-weight: 700;
+}

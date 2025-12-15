@@ -1,0 +1,29 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+.env
+.DS_Store
+
+# Database
+*.db
+database.db
+
+# Temporary files
+*.tmp
+*~
+~*
+*.log
+
+# IDEs
+.vscode/
+.idea/
+
+# Gemini related
+.gemini/
+
+# My own files
+seed.js
+make-admin.js

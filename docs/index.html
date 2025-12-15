@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en">
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>User Parking Availability Dashboard</title>
+  <title>ParkWise - Availability</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
     rel="stylesheet" />
@@ -14,6 +14,9 @@
     rel="stylesheet" />
   <link href="css/main.css" rel="stylesheet" />
   <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/theme.js"></script>
 </head>
 
 <body class="bg-background-light dark:bg-background-dark font-display">
@@ -22,37 +25,8 @@
       <div class="flex flex-1 justify-center p-4 sm:p-6 lg:p-8">
         <div class="layout-content-container flex w-full max-w-7xl flex-1 flex-col">
           <!-- TopNavBar -->
-          <header
-            class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-b-[#233348] px-4 py-3 sm:px-6">
-            <div class="flex items-center gap-4 text-gray-800 dark:text-white">
-              <div class="size-6 text-primary">
-                <span class="material-symbols-outlined text-4xl">local_parking</span>
-              </div>
-              <h1 class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Parking
-                Management</h1>
-            </div>
-            <div class="hidden md:flex flex-1 justify-center gap-8">
-              <div class="flex items-center gap-9">
-                <a class="text-gray-900 dark:text-white text-sm font-medium leading-normal"
-                  href="index.html">Dashboard</a>
-                <a class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal" href="book.html">Book a
-                  Slot</a>
-                <a class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal" href="profile.html">My
-                  Profile</a>
-              </div>
-            </div>
-            <div class="flex items-center gap-2">
-              <button id="theme-toggle"
-                class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 w-10 bg-gray-100 dark:bg-[#233348] text-gray-600 dark:text-white text-sm font-bold leading-normal tracking-[0.015em]">
-                <span class="material-symbols-outlined dark:hidden">light_mode</span>
-                <span class="material-symbols-outlined hidden dark:block">dark_mode</span>
-              </button>
-              <a href="login.html" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-                data-alt="User profile picture, abstract gradient"
-                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDZvDFmjNL9GhK1a__Q2Ki13IOrMe4wsSpiSBBEGXbikZ8_W3_tdR3g84Vh9EDInwzxgFXjhbZfHrXvEp4ch7eNqJB7MKm75vRv-9DdM13VMQgtQwxjobAOJfwpxGihgqCRZca26Uahmpx3dzbKgntC1dDLg_ZIWDwu2zU6bo3wv6x9C6kMelxtymcBmjIRtS1Q0DFL4-wZ1S2GS-NAp699fUL_xBiae2--h_lWdEgf0JBJ9FzCC8L7lVsFafaBsClGdd7TqfuOwew");'></a>
-            </div>
-          </header>
-          <main class="flex-1 py-6">
+          <div id="navbar-placeholder"></div>
+          <main class="flex-1">
             <!-- PageHeading -->
             <div class="flex flex-wrap items-center justify-between gap-4 p-4">
               <p

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en">
+<html lang="en">
 
 <head>
     <meta charset="utf-8" />
@@ -12,7 +12,14 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
-    <script src="js/main.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/theme.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            adminAuthGuard();
+        });
+    </script>
     <link href="css/admin_slots.css" rel="stylesheet" />
 </head>
 
@@ -23,7 +30,7 @@
             class="flex h-screen w-64 flex-col bg-white dark:bg-background-dark/50 border-r border-gray-200 dark:border-white/10 sticky top-0">
             <div class="flex h-full flex-col justify-between p-4">
                 <div class="flex flex-col gap-4">
-                    <a href="profile.html" class="flex items-center gap-3 p-2">
+                    <a href="../profile.html" class="flex items-center gap-3 p-2">
                         <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
                             data-alt="ParkRight company logo"
                             style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDCt_g0QYQlV5Iy3QYsCzsMEjPfloMtFLNQTA7MgbK7FB4m7M2Eg9oyvw1O_jNAM-FpVFFDTZPn4HitajZjBjw5ojklEHnrUTNc73JBhEWsNtjKVLOPwZeMZkT58uO5dL_dT54tUkRZXiQYVcUhdFj7odABvnjFlEcUI5CBPUgdL8IGfZy2CZ3OYUKd42TlNOizN_MyuIwgIYY8rRWTUr5CwWIvPnSUAyTV9kkMBNpYOxq9nNk_DQEVmCqxMa2tHWKYyQEdG2H4F7g");'>
@@ -68,7 +75,7 @@
                 </div>
                 <div class="flex flex-col gap-1 border-t border-gray-200 dark:border-white/10 pt-4">
                     <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
-                        href="login.html">
+                        href="../login.html">
                         <span class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">logout</span>
                         <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Logout</p>
                     </a>
