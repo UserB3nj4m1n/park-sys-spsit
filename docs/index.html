@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>ParkWise - Availability</title>
+  <title>ParkWise - Dostupnosť</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
     rel="stylesheet" />
@@ -24,94 +24,86 @@
     <div class="layout-container flex h-full grow flex-col">
       <div class="flex flex-1 justify-center p-4 sm:p-6 lg:p-8">
         <div class="layout-content-container flex w-full max-w-7xl flex-1 flex-col">
-          <!-- TopNavBar -->
           <div id="navbar-placeholder"></div>
           <main class="flex-1">
-            <!-- PageHeading -->
             <div class="flex flex-wrap items-center justify-between gap-4 p-4">
               <p
                 class="text-gray-900 dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">
-                Parking Availability Dashboard</p>
+                Prehľad dostupnosti parkovania</p>
               <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                 <span class="material-symbols-outlined text-base">update</span>
-                <span>Last updated: just now</span>
+                <span>Posledná aktualizácia: práve teraz</span>
               </div>
             </div>
-            <!-- Stats -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
               <div
                 class="flex flex-1 flex-col gap-2 rounded-lg p-6 border border-gray-200 dark:border-[#324867] bg-white dark:bg-transparent">
-                <p class="text-gray-600 dark:text-gray-300 text-base font-medium leading-normal">Available Spots</p>
+                <p class="text-gray-600 dark:text-gray-300 text-base font-medium leading-normal">Voľné miesta</p>
                 <p id="available-spots"
                   class="text-gray-900 dark:text-white tracking-light text-3xl font-bold leading-tight">128</p>
               </div>
               <div
                 class="flex flex-1 flex-col gap-2 rounded-lg p-6 border border-gray-200 dark:border-[#324867] bg-white dark:bg-transparent">
-                <p class="text-gray-600 dark:text-gray-300 text-base font-medium leading-normal">Total Spots</p>
+                <p class="text-gray-600 dark:text-gray-300 text-base font-medium leading-normal">Celkový počet miest</p>
                 <p id="total-spots"
                   class="text-gray-900 dark:text-white tracking-light text-3xl font-bold leading-tight">350</p>
               </div>
               <div
                 class="flex flex-1 flex-col gap-2 rounded-lg p-6 border border-gray-200 dark:border-[#324867] bg-white dark:bg-transparent">
-                <p class="text-gray-600 dark:text-gray-300 text-base font-medium leading-normal">Occupancy</p>
+                <p class="text-gray-600 dark:text-gray-300 text-base font-medium leading-normal">Obsadenosť</p>
                 <p id="occupancy" class="text-gray-900 dark:text-white tracking-light text-3xl font-bold leading-tight">
                   64%</p>
               </div>
             </div>
-            <!-- Filters & Map Section -->
             <div class="mt-6 flex flex-col lg:flex-row gap-6 p-4">
-              <!-- Left Panel: Filters and Legend -->
               <div class="flex flex-col gap-6 lg:w-1/4">
-                <!-- Filters -->
                 <div class="rounded-lg border border-gray-200 dark:border-[#324867] bg-white dark:bg-transparent p-4">
-                  <h3 class="text-gray-900 dark:text-white text-lg font-bold mb-4">Filter Spots</h3>
+                  <h3 class="text-gray-900 dark:text-white text-lg font-bold mb-4">Filtrovať miesta</h3>
                   <div class="flex flex-col gap-3">
                     <button
                       class="flex w-full items-center justify-center gap-x-2 rounded-lg bg-primary text-white h-10 px-4 text-sm font-medium leading-normal">
-                      <span class="material-symbols-outlined">apps</span>All Spots
+                      <span class="material-symbols-outlined">apps</span>Všetky miesta
                     </button>
                     <button
                       class="flex w-full items-center justify-center gap-x-2 rounded-lg bg-gray-100 dark:bg-[#233348] text-gray-700 dark:text-gray-300 h-10 px-4 text-sm font-medium leading-normal">
-                      <span class="material-symbols-outlined">ev_station</span>EV Charging
+                      <span class="material-symbols-outlined">ev_station</span>EV Nabíjanie
                     </button>
                     <button
                       class="flex w-full items-center justify-center gap-x-2 rounded-lg bg-gray-100 dark:bg-[#233348] text-gray-700 dark:text-gray-300 h-10 px-4 text-sm font-medium leading-normal">
-                      <span class="material-symbols-outlined">accessible</span>Accessible
+                      <span class="material-symbols-outlined">accessible</span>Bezbariérové
                     </button>
                     <button
                       class="flex w-full items-center justify-center gap-x-2 rounded-lg bg-gray-100 dark:bg-[#233348] text-gray-700 dark:text-gray-300 h-10 px-4 text-sm font-medium leading-normal">
-                      <span class="material-symbols-outlined">bookmark</span>Reserved
+                      <span class="material-symbols-outlined">bookmark</span>Rezervované
                     </button>
                   </div>
                 </div>
-                <!-- Legend -->
                 <div class="rounded-lg border border-gray-200 dark:border-[#324867] bg-white dark:bg-transparent p-4">
-                  <h3 class="text-gray-900 dark:text-white text-lg font-bold mb-4">Legend</h3>
+                  <h3 class="text-gray-900 dark:text-white text-lg font-bold mb-4">Legenda</h3>
                   <div class="flex flex-col gap-3">
                     <div class="flex items-center gap-3">
                       <div class="size-5 rounded bg-green-500"></div>
-                      <span class="text-sm text-gray-600 dark:text-gray-300">Available</span>
+                      <span class="text-sm text-gray-600 dark:text-gray-300">Voľné</span>
                     </div>
                     <div class="flex items-center gap-3">
                       <div class="size-5 rounded bg-red-500"></div>
-                      <span class="text-sm text-gray-600 dark:text-gray-300">Occupied</span>
+                      <span class="text-sm text-gray-600 dark:text-gray-300">Obsadené</span>
                     </div>
                     <div class="flex items-center gap-3">
                       <div class="size-5 rounded bg-blue-500"></div>
-                      <span class="text-sm text-gray-600 dark:text-gray-300">Reserved</span>
+                      <span class="text-sm text-gray-600 dark:text-gray-300">Rezervované</span>
                     </div>
                     <div class="flex items-center gap-3">
                       <div class="size-5 rounded bg-yellow-500"></div>
-                      <span class="text-sm text-gray-600 dark:text-gray-300">Special</span>
+                      <span class="text-sm text-gray-600 dark:text-gray-300">Špeciálne</span>
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- Right Panel: Parking Grid -->
               <div
                 class="flex-1 rounded-lg border border-gray-200 dark:border-[#324867] bg-white dark:bg-transparent p-4">
                 <h2 class="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-5">
-                  Level P1 - West Lot</h2>
+                  Úroveň P1 - Západné parkovisko</h2>
                 <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
                   <div id="parking-spot-template"
                     class="hidden flex cursor-pointer flex-col items-center justify-center gap-1 rounded border-2 p-2 text-center aspect-square"

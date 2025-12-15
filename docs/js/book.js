@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateAvailableSlotsCount(slots) {
         const availableCount = slots.filter(s => s.status === 'available').length;
         if (availableSlotsDisplay) {
-            availableSlotsDisplay.textContent = `${availableCount} Slots Available`;
+            availableSlotsDisplay.textContent = `${availableCount} voľných miest`;
             console.log('Available slots count:', availableCount);
         }
     }
@@ -154,22 +154,30 @@ document.addEventListener('DOMContentLoaded', () => {
             summarySlot.textContent = 'N/A';
         }
 
-        summaryDate.textContent = selectedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        summaryDate.textContent = selectedDate.toLocaleDateString('sk-SK', { month: 'long', day: 'numeric', year: 'numeric' });
 
-        const hours = durationSlider.value;
+        const hours = parseInt(durationSlider.value, 10);
         const price = hours * pricePerHour;
         
-        summaryDuration.textContent = `${hours} Hour(s) (${startTimeInput.value || 'N/A'} - ${endTimeInput.value || 'N/A'})`;
-        summaryPrice.textContent = `$${price.toFixed(2)}`;
+        const startTime = startTimeInput.value;
+        let endTimeText = 'N/A';
+        if (startTime) {
+            const [startHour, startMinute] = startTime.split(':').map(Number);
+            const endDate = new Date();
+            endDate.setHours(startHour + hours, startMinute);
+            endTimeText = endDate.toLocaleTimeString('sk-SK', { hour: '2-digit', minute: '2-digit', hour12: false });
+        }
+        
+        summaryDuration.textContent = `${hours} hodín (${startTime || 'N/A'} - ${endTimeText})`;
+        summaryPrice.textContent = `${price.toFixed(2)} €`;
         console.log('Summary updated:', { slot: summarySlot.textContent, date: summaryDate.textContent, duration: summaryDuration.textContent, price: summaryPrice.textContent });
     }
 
     function addEventListeners() {
         console.log('Adding event listeners...');
         if(calendarDaysContainer) calendarDaysContainer.addEventListener('click', handleCalendarClick);
-        if (durationSlider) durationSlider.addEventListener('input', updateSummary);
+        if (durationSlider) durationSlider.addEventListener('change', updateSummary);
         if (startTimeInput) startTimeInput.addEventListener('input', updateSummary);
-        if (endTimeInput) endTimeInput.addEventListener('input', updateSummary);
         if (confirmBookingButton) confirmBookingButton.addEventListener('click', confirmBooking);
         
         // Event delegation for parking slots
@@ -187,29 +195,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function confirmBooking() {
-        console.log('Confirm booking button clicked.');
         const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
         if (!loggedInUser) {
-            alert('You must be logged in to book a slot.');
+            alert('Pre rezerváciu miesta musíte byť prihlásený.');
             window.location.href = 'login.html';
             return;
         }
 
         if (!selectedSlotId) {
-            alert('Please select a parking slot.');
+            alert('Prosím, vyberte si parkovacie miesto.');
             return;
         }
-
+        
+        const endTime = summaryDuration.textContent.split(' - ')[1].replace(')', '');
         const bookingData = {
             userId: loggedInUser.id,
             slotId: selectedSlotId,
             date: selectedDate.toISOString().split('T')[0],
             startTime: startTimeInput.value,
-            endTime: endTimeInput.value,
-            price: parseFloat(summaryPrice.textContent.replace('$', ''))
+            endTime: endTime,
+            price: parseFloat(summaryPrice.textContent.replace('€', '').trim())
         };
-
-        console.log('Booking data:', bookingData);
 
         fetch('http://localhost:3000/api/bookings', {
             method: 'POST',
@@ -221,20 +227,18 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             if (data.message === 'Booking created successfully.') {
-                alert('Booking successful!');
-                console.log('Booking successful:', data);
-                fetchSlots(); // Refresh slots to show the new status
+                alert('Rezervácia prebehla úspešne!');
+                fetchSlots();
                 selectedSlotElement = null;
                 selectedSlotId = null;
                 updateSummary();
             } else {
-                alert('Booking failed: ' + data.message);
-                console.error('Booking failed:', data);
+                alert('Rezervácia zlyhala: ' + data.message);
             }
         })
         .catch(error => {
             console.error('Error during booking:', error);
-            alert('An error occurred during booking. Please try again.');
+            alert('Počas rezervácie sa vyskytla chyba. Skúste to prosím znova.');
         });
     }
 

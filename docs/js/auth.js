@@ -51,7 +51,7 @@ async function handleRegister() {
     const confirmPassword = document.getElementById('confirm-password').value;
 
     if (password !== confirmPassword) {
-        alert("Passwords do not match.");
+        alert("Heslá sa nezhodujú.");
         return;
     }
 
@@ -78,7 +78,7 @@ async function handleRegister() {
         }
     } catch (error) {
         console.error('Error during registration:', error);
-        alert('Could not connect to the server.');
+        alert('Nepodarilo sa pripojiť k serveru.');
     }
 }
 
@@ -105,7 +105,7 @@ async function handleLogin() {
         }
     } catch (error) {
         console.error('Error during login:', error);
-        alert('Could not connect to the server.');
+        alert('Nepodarilo sa pripojiť k serveru.');
     }
 }
 
@@ -127,7 +127,7 @@ function authGuard() {
 function adminAuthGuard() {
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
     if (!loggedInUser || loggedInUser.role !== 'admin') {
-        alert('You do not have administrative privileges to view this page.');
+        alert('Na zobrazenie tejto stránky nemáte oprávnenia správcu.');
         window.location.href = '/docs/index.html'; 
     }
 }

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="sk">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>ParkWise - Login/Registration</title>
+    <title>ParkWise - Prihlásenie/Registrácia</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
@@ -39,9 +39,8 @@
                             </div>
                             <h2
                                 class="text-4xl font-black text-slate-900 dark:text-white leading-tight tracking-[-0.03em]">
-                                Smart Parking, Simplified.</h2>
-                            <p class="text-base text-slate-600 dark:text-[#92a9c9]">Manage your parking spaces
-                                efficiently and effortlessly with our intelligent platform.</p>
+                                Inteligentné parkovanie, zjednodušené.</h2>
+                            <p class="text-base text-slate-600 dark:text-[#92a9c9]">Spravujte svoje parkovacie miesta efektívne a bez námahy s našou inteligentnou platformou.</p>
                         </div>
                     </div>
                     <!-- Right Column: Form Area -->
@@ -50,22 +49,21 @@
                             <div class="flex flex-col gap-3">
                                 <p
                                     class="text-slate-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">
-                                    Welcome Back</p>
-                                <p class="text-slate-600 dark:text-[#92a9c9] text-base font-normal leading-normal">Sign
-                                    in to access your parking management dashboard.</p>
+                                    Vitajte späť</p>
+                                <p class="text-slate-600 dark:text-[#92a9c9] text-base font-normal leading-normal">Prihláste sa a získajte prístup k svojmu panelu na správu parkovania.</p>
                             </div>
                             <div class="flex">
                                 <div
                                     class="flex h-10 flex-1 items-center justify-center rounded-lg bg-slate-200 dark:bg-[#233348] p-1">
                                     <label
                                         class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-[#101822] has-[:checked]:shadow-sm has-[:checked]:text-slate-900 dark:has-[:checked]:text-white text-slate-500 dark:text-[#92a9c9] text-sm font-medium leading-normal transition-colors">
-                                        <span class="truncate">Sign In</span>
+                                        <span class="truncate">Prihlásiť sa</span>
                                         <input checked="" class="invisible w-0" name="auth-toggle" type="radio"
                                             value="Sign In" />
                                     </label>
                                     <label
                                         class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-[#101822] has-[:checked]:shadow-sm has-[:checked]:text-slate-900 dark:has-[:checked]:text-white text-slate-500 dark:text-[#92a9c9] text-sm font-medium leading-normal transition-colors">
-                                        <span class="truncate">Register</span>
+                                        <span class="truncate">Registrovať</span>
                                         <input class="invisible w-0" name="auth-toggle" type="radio" value="Register" />
                                     </label>
                                 </div>
@@ -73,29 +71,28 @@
                             <div id="register-form" class="flex flex-col gap-4">
                                 <label class="flex flex-col flex-1">
                                     <p class="text-slate-800 dark:text-white text-sm font-medium leading-normal pb-2">
-                                        Full Name</p>
+                                        Celé meno</p>
                                     <input id="full-name"
                                         class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-[#324867] bg-background-light dark:bg-[#192433] focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-[#92a9c9] p-3 text-base font-normal leading-normal"
-                                        placeholder="Enter your full name" type="text" value="" />
+                                        placeholder="Zadajte svoje celé meno" type="text" value="" />
                                 </label>
                                 <label class="flex flex-col flex-1">
                                     <p class="text-slate-800 dark:text-white text-sm font-medium leading-normal pb-2">
-                                        Email Address</p>
+                                        Emailová adresa</p>
                                     <input id="email"
                                         class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-[#324867] bg-background-light dark:bg-[#192433] focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-[#92a9c9] p-3 text-base font-normal leading-normal"
-                                        placeholder="Enter your email" type="email" value="" />
+                                        placeholder="Zadajte Váš email" type="email" value="" />
                                 </label>
                                 <label class="flex flex-col flex-1">
                                     <div class="flex justify-between items-baseline pb-2">
                                         <p class="text-slate-800 dark:text-white text-sm font-medium leading-normal">
-                                            Password</p>
-                                        <a class="text-sm font-medium text-primary hover:underline" href="#">Forgot
-                                            Password?</a>
+                                            Heslo</p>
+                                        <a class="text-sm font-medium text-primary hover:underline" href="#">Zabudli ste heslo?</a>
                                     </div>
                                     <div class="flex w-full flex-1 items-stretch rounded-lg">
                                         <input id="password"
                                             class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-[#324867] bg-background-light dark:bg-[#192433] focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-[#92a9c9] p-3 rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal"
-                                            placeholder="Enter your password" type="password" value="" />
+                                            placeholder="Zadajte svoje heslo" type="password" value="" />
                                         <button aria-label="Toggle password visibility"
                                             class="text-slate-500 dark:text-[#92a9c9] flex border border-slate-300 dark:border-[#324867] bg-background-light dark:bg-[#192433] items-center justify-center px-3 rounded-r-lg border-l-0 hover:text-slate-700 dark:hover:text-white">
                                             <span class="material-symbols-outlined">visibility</span>
@@ -104,16 +101,15 @@
                                 </label>
                                 <label class="flex flex-col flex-1">
                                     <p class="text-slate-800 dark:text-white text-sm font-medium leading-normal pb-2">
-                                        Confirm Password</p>
+                                        Potvrďte heslo</p>
                                     <input id="confirm-password"
                                         class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-[#324867] bg-background-light dark:bg-[#192433] focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-[#92a9c9] p-3 text-base font-normal leading-normal"
-                                        placeholder="Confirm your password" type="password" value="" />
+                                        placeholder="Potvrďte svoje heslo" type="password" value="" />
                                 </label>
                             </div>
                             <div class="flex flex-col gap-4">
                                 <button id="main-button"
-                                    class="flex items-center justify-center h-12 px-6 rounded-lg bg-primary text-white text-base font-bold w-full hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background-light dark:focus:ring-offset-background-dark transition-colors">Sign
-                                    In</button>
+                                    class="flex items-center justify-center h-12 px-6 rounded-lg bg-primary text-white text-base font-bold w-full hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background-light dark:focus:ring-offset-background-dark transition-colors">Prihlásiť sa</button>
                             </div>
                         </div>
                     </div>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="sk">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Admin Parking Slot Management</title>
+    <title>Správa parkovacích miest</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
         rel="stylesheet" />
@@ -37,7 +37,7 @@
                         </div>
                         <div class="flex flex-col">
                             <h1 class="text-gray-900 dark:text-white text-base font-bold leading-normal">ParkRight</h1>
-                            <p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Management
+                            <p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Manažment
                             </p>
                         </div>
                     </a>
@@ -46,30 +46,30 @@
                             href="admin.html">
                             <span
                                 class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">dashboard</span>
-                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Dashboard</p>
+                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Hlavný panel</p>
                         </a>
                         <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
                             href="admin_users.html">
                             <span
                                 class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">group</span>
-                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Users</p>
+                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Používatelia</p>
                         </a>
                         <a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 dark:bg-primary/20"
                             href="admin_slots.html">
                             <span class="material-symbols-outlined text-primary text-2xl">local_parking</span>
-                            <p class="text-primary text-sm font-bold leading-normal">Parking Slots</p>
+                            <p class="text-primary text-sm font-bold leading-normal">Parkovacie miesta</p>
                         </a>
                         <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
                             href="#">
                             <span
                                 class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">book_online</span>
-                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Bookings</p>
+                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Rezervácie</p>
                         </a>
                         <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
                             href="#">
                             <span
                                 class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">settings</span>
-                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Settings</p>
+                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Nastavenia</p>
                         </a>
                     </nav>
                 </div>
@@ -77,7 +77,7 @@
                     <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
                         href="../login.html">
                         <span class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">logout</span>
-                        <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Logout</p>
+                        <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Odhlásiť sa</p>
                     </a>
                 </div>
             </div>
@@ -87,8 +87,7 @@
             <div class="max-w-7xl mx-auto">
                 <!-- PageHeading -->
                 <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
-                    <p class="text-gray-900 dark:text-white text-3xl font-bold leading-tight tracking-tight">Parking
-                        Slot Management</p>
+                    <p class="text-gray-900 dark:text-white text-3xl font-bold leading-tight tracking-tight">Správa parkovacích miest</p>
                     <div class="flex items-center gap-4">
                         <button id="theme-toggle" class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 w-10 bg-gray-100 dark:bg-[#233348] text-gray-600 dark:text-white text-sm font-bold leading-normal tracking-[0.015em]">
                             <span class="material-symbols-outlined dark:hidden">light_mode</span>
@@ -97,7 +96,7 @@
                         <button
                             class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
                             <span class="material-symbols-outlined">add</span>
-                            <span class="truncate">Add New Slot</span>
+                            <span class="truncate">Pridať nové miesto</span>
                         </button>
                     </div>
                 </div>
@@ -114,7 +113,7 @@
                                 </div>
                                 <input
                                     class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/40 h-full placeholder:text-gray-500 dark:placeholder:text-gray-400 px-3 border-l-0 text-sm font-normal leading-normal"
-                                    placeholder="Search by Slot ID (e.g. A-01)" value="" />
+                                    placeholder="Hľadať podľa ID miesta (napr. A-01)" value="" />
                             </div>
                         </label>
                     </div>
@@ -122,12 +121,12 @@
                     <div class="flex gap-3">
                         <button
                             class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-gray-100 dark:bg-gray-900/40 border border-gray-300 dark:border-gray-700 px-4 hover:bg-gray-200 dark:hover:bg-gray-700">
-                            <p class="text-gray-900 dark:text-white text-sm font-medium leading-normal">Status: All</p>
+                            <p class="text-gray-900 dark:text-white text-sm font-medium leading-normal">Stav: Všetky</p>
                             <span class="material-symbols-outlined text-base">expand_more</span>
                         </button>
                         <button
                             class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-gray-100 dark:bg-gray-900/40 border border-gray-300 dark:border-gray-700 px-4 hover:bg-gray-200 dark:hover:bg-gray-700">
-                            <p class="text-gray-900 dark:text-white text-sm font-medium leading-normal">Level: All</p>
+                            <p class="text-gray-900 dark:text-white text-sm font-medium leading-normal">Úroveň: Všetky</p>
                             <span class="material-symbols-outlined text-base">expand_more</span>
                         </button>
                     </div>
@@ -143,11 +142,11 @@
                                     <th class="p-4" scope="col"><input
                                             class="form-checkbox rounded text-primary focus:ring-primary/50"
                                             type="checkbox" /></th>
-                                    <th class="px-6 py-3" scope="col">Slot ID</th>
-                                    <th class="px-6 py-3" scope="col">Level/Zone</th>
-                                    <th class="px-6 py-3" scope="col">Type</th>
-                                    <th class="px-6 py-3" scope="col">Status</th>
-                                    <th class="px-6 py-3" scope="col">Actions</th>
+                                    <th class="px-6 py-3" scope="col">ID Miesta</th>
+                                    <th class="px-6 py-3" scope="col">Úroveň/Zóna</th>
+                                    <th class="px-6 py-3" scope="col">Typ</th>
+                                    <th class="px-6 py-3" scope="col">Stav</th>
+                                    <th class="px-6 py-3" scope="col">Akcie</th>
                                 </tr>
                             </thead>
                             <tbody class="text-gray-900 dark:text-white">
@@ -163,7 +162,7 @@
                                         <span
                                             class="inline-flex items-center gap-1.5 rounded-full bg-green-100 dark:bg-green-900/50 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300">
                                             <span class="size-1.5 rounded-full bg-green-500"></span>
-                                            Available
+                                            Voľné
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 flex items-center gap-2">
@@ -187,7 +186,7 @@
                                         <span
                                             class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 dark:bg-yellow-900/50 px-2 py-1 text-xs font-medium text-yellow-700 dark:text-yellow-300">
                                             <span class="size-1.5 rounded-full bg-yellow-500"></span>
-                                            Occupied
+                                            Obsadené
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 flex items-center gap-2">
@@ -211,7 +210,7 @@
                                         <span
                                             class="inline-flex items-center gap-1.5 rounded-full bg-green-100 dark:bg-green-900/50 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300">
                                             <span class="size-1.5 rounded-full bg-green-500"></span>
-                                            Available
+                                            Voľné
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 flex items-center gap-2">
@@ -235,7 +234,7 @@
                                         <span
                                             class="inline-flex items-center gap-1.5 rounded-full bg-red-100 dark:bg-red-900/50 px-2 py-1 text-xs font-medium text-red-700 dark:text-red-300">
                                             <span class="size-1.5 rounded-full bg-red-500"></span>
-                                            Disabled
+                                            Vypnuté
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 flex items-center gap-2">
@@ -252,13 +251,13 @@
                     </div>
                     <!-- Pagination -->
                     <nav aria-label="Table navigation" class="flex items-center justify-between p-4">
-                        <span class="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span
-                                class="font-semibold text-gray-900 dark:text-white">1-4</span> of <span
+                        <span class="text-sm font-normal text-gray-500 dark:text-gray-400">Zobrazuje sa <span
+                                class="font-semibold text-gray-900 dark:text-white">1-4</span> z <span
                                 class="font-semibold text-gray-900 dark:text-white">100</span></span>
                         <ul class="inline-flex -space-x-px text-sm h-8">
                             <li>
                                 <a class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white dark:bg-[#111822] border border-gray-300 dark:border-gray-700 rounded-l-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-white"
-                                    href="#">Previous</a>
+                                    href="#">Predchádzajúce</a>
                             </li>
                             <li>
                                 <a class="flex items-center justify-center px-3 h-8 text-primary bg-primary/10 dark:bg-primary/20 border border-gray-300 dark:border-gray-700 hover:bg-primary/20"
@@ -274,7 +273,7 @@
                             </li>
                             <li>
                                 <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white dark:bg-[#111822] border border-gray-300 dark:border-gray-700 rounded-r-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-white"
-                                    href="#">Next</a>
+                                    href="#">Ďalšie</a>
                             </li>
                         </ul>
                     </nav>

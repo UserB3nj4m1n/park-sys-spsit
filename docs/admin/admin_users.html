@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="sk">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Admin User Management</title>
+    <title>Správa používateľov</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
         rel="stylesheet" />
@@ -37,7 +37,7 @@
                         </div>
                         <div class="flex flex-col">
                             <h1 class="text-gray-900 dark:text-white text-base font-bold leading-normal">ParkRight</h1>
-                            <p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Management
+                            <p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Manažment
                             </p>
                         </div>
                     </a>
@@ -46,31 +46,31 @@
                             href="admin.html">
                             <span
                                 class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">dashboard</span>
-                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Dashboard</p>
+                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Hlavný panel</p>
                         </a>
                         <a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 dark:bg-primary/20"
                             href="admin_users.html">
                             <span class="material-symbols-outlined text-primary text-2xl">group</span>
-                            <p class="text-primary text-sm font-bold leading-normal">Users</p>
+                            <p class="text-primary text-sm font-bold leading-normal">Používatelia</p>
                         </a>
                         <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
                             href="admin_slots.html">
                             <span
                                 class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">local_parking</span>
-                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Parking Slots
+                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Parkovacie miesta
                             </p>
                         </a>
                         <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
                             href="#">
                             <span
                                 class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">book_online</span>
-                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Bookings</p>
+                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Rezervácie</p>
                         </a>
                         <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
                             href="#">
                             <span
                                 class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">settings</span>
-                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Settings</p>
+                            <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Nastavenia</p>
                         </a>
                     </nav>
                 </div>
@@ -78,7 +78,7 @@
                     <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
                         href="../login.html">
                         <span class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">logout</span>
-                        <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Logout</p>
+                        <p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Odhlásiť sa</p>
                     </a>
                 </div>
             </div>
@@ -89,9 +89,8 @@
                 <!-- PageHeading -->
                 <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
                     <div class="flex flex-col gap-1">
-                        <h1 class="text-gray-900 dark:text-white text-3xl font-bold leading-tight">User Management</h1>
-                        <p class="text-gray-500 dark:text-[#92a9c9] text-base font-normal leading-normal">View, add,
-                            edit, and delete user accounts.</p>
+                        <h1 class="text-gray-900 dark:text-white text-3xl font-bold leading-tight">Správa používateľov</h1>
+                        <p class="text-gray-500 dark:text-[#92a9c9] text-base font-normal leading-normal">Zobrazte, pridajte, upravte a odstráňte používateľské účty.</p>
                     </div>
                     <div class="flex items-center gap-4">
                         <button id="theme-toggle"
@@ -102,7 +101,7 @@
                         <button
                             class="flex min-w-[84px] items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50">
                             <span class="material-symbols-outlined text-base">add</span>
-                            <span class="truncate">Add User</span>
+                            <span class="truncate">Pridať používateľa</span>
                         </button>
                     </div>
                 </div>
@@ -114,16 +113,16 @@
                             class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">search</span>
                         <input
                             class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-[#324867] bg-white dark:bg-[#192433] text-gray-900 dark:text-white focus:ring-primary focus:border-primary"
-                            placeholder="Search by name or email..." type="text" />
+                            placeholder="Hľadať podľa mena alebo emailu..." type="text" />
                     </div>
                     <div class="flex items-center gap-2">
                         <div class="relative">
                             <select
                                 class="appearance-none w-36 pl-3 pr-8 py-2 rounded-lg border border-gray-300 dark:border-[#324867] bg-white dark:bg-[#192433] text-gray-900 dark:text-white focus:ring-primary focus:border-primary">
-                                <option>All Roles</option>
+                                <option>Všetky roly</option>
                                 <option>Admin</option>
-                                <option>Staff</option>
-                                <option>User</option>
+                                <option>Personál</option>
+                                <option>Používateľ</option>
                             </select>
                             <span
                                 class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">expand_more</span>
@@ -131,9 +130,9 @@
                         <div class="relative">
                             <select
                                 class="appearance-none w-36 pl-3 pr-8 py-2 rounded-lg border border-gray-300 dark:border-[#324867] bg-white dark:bg-[#192433] text-gray-900 dark:text-white focus:ring-primary focus:border-primary">
-                                <option>All Statuses</option>
-                                <option>Active</option>
-                                <option>Inactive</option>
+                                <option>Všetky stavy</option>
+                                <option>Aktívny</option>
+                                <option>Neaktívny</option>
                             </select>
                             <span
                                 class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">expand_more</span>
@@ -153,19 +152,19 @@
                                     </th>
                                     <th
                                         class="p-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                        User</th>
+                                        Používateľ</th>
                                     <th
                                         class="p-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                        Role</th>
+                                        Rola</th>
                                     <th
                                         class="p-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                        Status</th>
+                                        Stav</th>
                                     <th
                                         class="p-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                        Date Added</th>
+                                        Dátum pridania</th>
                                     <th
                                         class="p-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                        Actions</th>
+                                        Akcie</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 dark:divide-[#324867]">
@@ -189,7 +188,7 @@
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300">Admin</span>
                                     </td>
                                     <td class="p-4"><span
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">Active</span>
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">Aktívny</span>
                                     </td>
                                     <td class="p-4 text-gray-500 dark:text-[#92a9c9]">Jan 15, 2024</td>
                                     <td class="p-4">
@@ -220,10 +219,10 @@
                                         </div>
                                     </td>
                                     <td class="p-4"><span
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300">Staff</span>
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300">Personál</span>
                                     </td>
                                     <td class="p-4"><span
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">Active</span>
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">Aktívny</span>
                                     </td>
                                     <td class="p-4 text-gray-500 dark:text-[#92a9c9]">Jan 12, 2024</td>
                                     <td class="p-4">
@@ -253,10 +252,10 @@
                                         </div>
                                     </td>
                                     <td class="p-4"><span
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">User</span>
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">Používateľ</span>
                                     </td>
                                     <td class="p-4"><span
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">Active</span>
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">Aktívny</span>
                                     </td>
                                     <td class="p-4 text-gray-500 dark:text-[#92a9c9]">Jan 10, 2024</td>
                                     <td class="p-4">
@@ -286,10 +285,10 @@
                                         </div>
                                     </td>
                                     <td class="p-4"><span
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">User</span>
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">Používateľ</span>
                                     </td>
                                     <td class="p-4"><span
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">Inactive</span>
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">Neaktívny</span>
                                     </td>
                                     <td class="p-4 text-gray-500 dark:text-[#92a9c9]">Jan 5, 2024</td>
                                     <td class="p-4">
