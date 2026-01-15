@@ -21,7 +21,11 @@ To run the backend server, follow these steps:
     ```bash
     cd park-sys
     ```
-3.  **Install dependencies:**
+3.  **Navigate to the backend directory:**
+    ```bash
+    cd backend
+    ```
+4.  **Install dependencies:**
     ```bash
     npm install
     ```
@@ -33,8 +37,9 @@ The frontend is located in the `docs` directory and requires no special installa
 ## Usage
 
 1.  **Start the backend server:**
+    From the `backend` directory, run:
     ```bash
-    node server.js
+    npm start
     ```
     The server will start on `http://localhost:3000`.
 
@@ -52,7 +57,7 @@ The API is documented in the `server.js` file. Here are the main endpoints:
 
 ### Functions and Classes
 
-The main functions and classes are located in the `server.js` file for the backend and in the `docs/js` directory for the frontend.
+The main functions and classes are located in the `backend/server.js` file for the backend and in the `docs/js` directory for the frontend.
 
 ## Services
 
