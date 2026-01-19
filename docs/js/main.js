@@ -16,6 +16,7 @@ tailwind.config = {
       }
     
 document.addEventListener('DOMContentLoaded', () => {
+    // Existing parking spot logic
     const parkingSpotTemplate = document.getElementById('parking-spot-template');
     const parkingGrid = parkingSpotTemplate ? parkingSpotTemplate.parentElement : null;
     const availableSpotsEl = document.getElementById('available-spots');
@@ -162,4 +163,45 @@ document.addEventListener('DOMContentLoaded', () => {
             filterButtons[0].classList.add('bg-primary', 'text-white');
         }
     }
+
+    // New logic for fetching currently parked cars
+    fetchCurrentlyParked();
+    setInterval(fetchCurrentlyParked, 15000);
 });
+
+async function fetchCurrentlyParked() {
+    const container = document.getElementById('currently-parked-container');
+    try {
+        const response = await fetch('http://localhost:3000/api/parking/current');
+        const result = await response.json();
+
+        if (result.message !== 'success') {
+            throw new Error('Failed to fetch data.');
+        }
+
+        // Clear previous entries
+        container.innerHTML = '';
+
+        if (result.data.length === 0) {
+            container.innerHTML = '<p class="text-gray-500">No vehicles are currently parked.</p>';
+            return;
+        }
+
+        // Create a card for each vehicle
+        result.data.forEach(car => {
+            const entryTime = new Date(car.entry_time).toLocaleString();
+            const carCard = `
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                    <img src="http://localhost:3000/${car.image_path}" alt="License Plate" class="rounded-md mb-2 w-full h-32 object-cover"/>
+                    <h3 class="font-bold text-lg">${car.license_plate}</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Entered: ${entryTime}</p>
+                </div>
+            `;
+            container.innerHTML += carCard;
+        });
+
+    } catch (error) {
+        console.error('Error fetching parked cars:', error);
+        container.innerHTML = '<p class="text-red-500">Could not load data from the server.</p>';
+    }
+}

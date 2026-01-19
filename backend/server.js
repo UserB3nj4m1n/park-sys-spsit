@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
+const multer = require('multer');
+const path = require('path');
 
 const app = express();
 const port = 3000;
@@ -9,49 +11,105 @@ const port = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-const db = new sqlite3.Database('./database.db', (err) => {
+// Create an 'uploads' directory if it doesn't exist
+const fs = require('fs');
+const uploadsDir = './uploads';
+if (!fs.existsSync(uploadsDir)){
+    fs.mkdirSync(uploadsDir);
+}
+
+// --- Multer Configuration ---
+// This tells multer to save uploaded files to the 'uploads/' directory
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    // Create a unique filename to prevent overwrites
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage: storage });
+
+// --- Static File Serving ---
+// This makes the 'uploads' folder publicly accessible via HTTP
+// So the frontend can display the images
+app.use('/uploads', express.static('uploads'));
+
+const db = require('./database.js'); // your database connection
+const { recognizeLicensePlate } = require('./services/ocrService');
+const { openBarrier } = require('./services/esp32Service');
+
+// API endpoint for entry requests from the ESP32-CAM
+app.post('/api/parking/entry-request', upload.single('image'), async (req, res) => {
+  // The 'upload.single('image')' part uses multer to process the uploaded file.
+  // The field name 'image' MUST match the one used in the ESP32-CAM code.
+
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image uploaded.' });
+  }
+
+  const imagePath = req.file.path;
+  console.log(`Received image, saved to: ${imagePath}`);
+
+  // 1. Perform OCR
+  const licensePlate = await recognizeLicensePlate(imagePath);
+  if (!licensePlate) {
+    return res.status(500).json({ message: 'Failed to recognize license plate.' });
+  }
+
+  // 2. Save to Database
+  const entryTime = new Date().toISOString();
+  const query = `INSERT INTO parking_entries (license_plate, entry_time, image_path) VALUES (?, ?, ?)`;
+  
+  db.run(query, [licensePlate, entryTime, imagePath], async function(err) {
     if (err) {
-        console.error('Error opening database:', err.message);
-    } else {
-        console.log('Connected to the SQLite database.');
-        db.serialize(() => {
-            db.run(`CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                fullName TEXT NOT NULL,
-                email TEXT NOT NULL UNIQUE,
-                password TEXT NOT NULL,
-                role TEXT NOT NULL DEFAULT 'user'
-            )`, (err) => {
-                if (err) console.error("Error creating users table:", err.message);
-            });
-
-            db.run(`CREATE TABLE IF NOT EXISTS parking_slots (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                slot_name TEXT NOT NULL,
-                level TEXT NOT NULL,
-                type TEXT NOT NULL,
-                status TEXT NOT NULL DEFAULT 'available'
-            )`, (err) => {
-                if (err) {
-                    console.error("Error creating parking_slots table:", err.message);
-                }
-            });
-
-            db.run(`CREATE TABLE IF NOT EXISTS bookings (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER,
-                slot_id INTEGER,
-                start_time TEXT,
-                end_time TEXT,
-                booking_date TEXT,
-                total_price REAL,
-                FOREIGN KEY (user_id) REFERENCES users (id),
-                FOREIGN KEY (slot_id) REFERENCES parking_slots (id)
-            )`, (err) => {
-                if (err) console.error("Error creating bookings table:", err.message);
-            });
-        });
+      console.error('Database error:', err.message);
+      return res.status(500).json({ message: 'Failed to save parking entry.' });
     }
+
+    console.log(`New entry created with ID: ${this.lastID}`);
+
+    // 3. Open the Barrier
+    await openBarrier();
+
+    // 4. Send Success Response
+    res.status(200).json({
+      message: 'Entry processed successfully.',
+      licensePlate: licensePlate,
+      entryTime: entryTime
+    });
+  });
+});
+
+// API endpoint for the frontend to get currently parked cars
+app.get('/api/parking/current', (req, res) => {
+    const query = "SELECT * FROM parking_entries WHERE exit_time IS NULL ORDER BY entry_time DESC";
+    db.all(query, [], (err, rows) => {
+        if (err) {
+            res.status(500).json({ "error": err.message });
+            return;
+        }
+        res.json({
+            message: "success",
+            data: rows
+        });
+    });
+});
+
+// API endpoint for the frontend to get all parking history
+app.get('/api/parking/history', (req, res) => {
+    const query = "SELECT * FROM parking_entries ORDER BY entry_time DESC";
+    db.all(query, [], (err, rows) => {
+        if (err) {
+            res.status(500).json({ "error": err.message });
+            return;
+        }
+        res.json({
+            message: "success",
+            data: rows
+        });
+    });
 });
 
 // API endpoint to get all parking slots
