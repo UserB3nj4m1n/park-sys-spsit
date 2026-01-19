@@ -195,13 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function confirmBooking() {
-        const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
-        if (!loggedInUser) {
-            alert('Pre rezerváciu miesta musíte byť prihlásený.');
-            window.location.href = 'login.html';
-            return;
-        }
-
         if (!selectedSlotId) {
             alert('Prosím, vyberte si parkovacie miesto.');
             return;
@@ -209,7 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const endTime = summaryDuration.textContent.split(' - ')[1].replace(')', '');
         const bookingData = {
-            userId: loggedInUser.id,
             slotId: selectedSlotId,
             date: selectedDate.toISOString().split('T')[0],
             startTime: startTimeInput.value,

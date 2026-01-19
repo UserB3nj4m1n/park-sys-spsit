@@ -6,12 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (navbarPlaceholder) {
                 navbarPlaceholder.innerHTML = data;
 
-                // After navbar is loaded, update UI and attach theme toggle event listener
-                updateUI();
+                // After navbar is loaded, set active link and attach theme toggle event listener
                 setActiveLink();
 
                 const themeToggleButton = document.getElementById('theme-toggle');
                 if (themeToggleButton) {
+                    // Assuming handleThemeToggle is defined in theme.js and loaded globally
                     themeToggleButton.addEventListener('click', handleThemeToggle);
                 }
             }
@@ -20,30 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error fetching navbar:', error);
         });
 });
-
-function updateUI() {
-    const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
-    const loginButton = document.getElementById('login-button');
-    const userInfo = document.getElementById('user-info');
-    const userName = document.getElementById('user-name');
-    const logoutButton = document.getElementById('logout-button');
-    const adminLink = document.getElementById('admin-link');
-
-    if (loggedInUser) {
-        if (loginButton) loginButton.style.display = 'none';
-        if (userInfo) userInfo.style.display = 'flex';
-        if (userName) userName.textContent = loggedInUser.fullName;
-        if(logoutButton) logoutButton.addEventListener('click', handleLogout);
-
-        if (loggedInUser.role === 'admin') {
-            if (adminLink) adminLink.classList.remove('hidden');
-        }
-
-    } else {
-        if (loginButton) loginButton.style.display = 'block';
-        if (userInfo) userInfo.style.display = 'none';
-    }
-}
 
 function setActiveLink() {
     const links = document.querySelectorAll('#navbar-placeholder a');

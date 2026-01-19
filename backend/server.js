@@ -126,16 +126,16 @@ app.get('/api/slots', (req, res) => {
     });
 });
 
-// API endpoint to create a booking
+// API endpoint to create a booking (anonymous)
 app.post('/api/bookings', (req, res) => {
-    const { userId, slotId, date, startTime, endTime, price } = req.body;
+    const { slotId, date, startTime, endTime, price } = req.body;
 
-    if (!userId || !slotId || !date || !startTime || !endTime || !price) {
+    if (!slotId || !date || !startTime || !endTime || !price) {
         return res.status(400).json({ message: 'All booking fields are required.' });
     }
 
-    const bookingQuery = 'INSERT INTO bookings (user_id, slot_id, booking_date, start_time, end_time, total_price) VALUES (?, ?, ?, ?, ?, ?)';
-    db.run(bookingQuery, [userId, slotId, date, startTime, endTime, price], function(err) {
+    const bookingQuery = 'INSERT INTO bookings (slot_id, booking_date, start_time, end_time, total_price) VALUES (?, ?, ?, ?, ?)';
+    db.run(bookingQuery, [slotId, date, startTime, endTime, price], function(err) {
         if (err) {
             console.error('Error creating booking:', err);
             return res.status(500).json({ message: 'Internal server error.' });
@@ -153,58 +153,6 @@ app.post('/api/bookings', (req, res) => {
     });
 });
 
-
-app.post('/register', (req, res) => {
-    const { fullName, email, password } = req.body;
-
-    if (!fullName || !email || !password) {
-        return res.status(400).json({ message: 'All fields are required.' });
-    }
-
-    const query = 'INSERT INTO users (fullName, email, password) VALUES (?, ?, ?)';
-    db.run(query, [fullName, email, password], function(err) {
-        if (err) {
-            if (err.message.includes('UNIQUE constraint failed')) {
-                return res.status(409).json({ message: 'User with this email already exists.' });
-            }
-            console.error('Error creating user:', err);
-            return res.status(500).json({ message: 'Internal server error.' });
-        }
-        res.status(201).json({ message: 'User created successfully.' });
-    });
-});
-
-app.post('/login', (req, res) => {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-        return res.status(400).json({ message: 'Email and password are required.' });
-    }
-
-    const query = 'SELECT * FROM users WHERE email = ? AND password = ?';
-    db.get(query, [email, password], (err, user) => {
-        if (err) {
-            console.error('Error logging in:', err);
-            return res.status(500).json({ message: 'Internal server error.' });
-        }
-
-        if (user) {
-            // In a real app, you would return a token (e.g., JWT)
-            res.status(200).json({
-                message: 'Login successful.',
-                user: {
-                    id: user.id,
-                    fullName: user.fullName,
-                    email: user.email,
-                    role: user.role
-                }
-            });
-        } else {
-            res.status(401).json({ message: 'Invalid credentials.' });
-        }
-    });
-});
-
 app.listen(port, () => {
-    console.log(`Server is a running on http://localhost:${port}`);
+    console.log(`Server is running on http://localhost:${port}`);
 });
