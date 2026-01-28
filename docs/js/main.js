@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Data Fetching ---
     async function fetchSlots() {
         try {
-            const response = await fetch('http://localhost:3000/api/slots');
+            const response = await fetch('/api/slots');
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
             allSlots = data.data;
@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
         confirmBookingButton.textContent = 'Rezervujem...';
 
         try {
-            const response = await fetch('http://localhost:3000/api/bookings', {
+            const response = await fetch('/api/bookings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(bookingData),
