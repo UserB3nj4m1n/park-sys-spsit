@@ -16,3 +16,11 @@ function initializeTheme() {
 
 // Initialize theme on script load
 initializeTheme();
+
+// Add event listener for the theme toggle button
+document.addEventListener('DOMContentLoaded', () => {
+    const themeToggleButton = document.getElementById('theme-toggle');
+    if (themeToggleButton) {
+        themeToggleButton.addEventListener('click', handleThemeToggle);
+    }
+});

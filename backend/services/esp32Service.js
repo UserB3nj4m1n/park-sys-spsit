@@ -1,17 +1,20 @@
 const axios = require('axios');
 
-// IMPORTANT: Replace with the actual IP of the barrier ESP32
+// ==== KONFIGURÁCIA ====
+// DÔLEŽITÉ: Nahraďte túto IP adresu skutočnou IP adresou vašej ESP32, ktorá ovláda rampu.
 const BARRIER_ESP32_IP = '192.168.1.101'; 
+// ======================
 
 async function openBarrier() {
   try {
-    console.log(`Sending 'open' command to barrier at ${BARRIER_ESP32_IP}...`);
-    const response = await axios.get(`http://${BARRIER_ESP32_IP}/open`);
-    console.log('Barrier ESP32 responded:', response.data);
+    const url = `http://${BARRIER_ESP32_IP}/open-barrier`;
+    console.log(`Posiela sa príkaz na otvorenie rampy na adresu: ${url}`);
+    const response = await axios.get(url);
+    console.log('Odpoveď z ESP32 (rampa):', response.data);
     return { success: true, message: response.data };
   } catch (error) {
-    console.error('Failed to send command to barrier ESP32:', error.message);
-    return { success: false, message: 'Barrier is offline or did not respond.' };
+    console.error('Nepodarilo sa poslať príkaz na ESP32 (rampa):', error.message);
+    return { success: false, message: 'Rampa je offline alebo neodpovedá.' };
   }
 }
 

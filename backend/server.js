@@ -46,7 +46,7 @@ app.post('/api/parking/entry-request', upload.single('image'), async (req, res) 
   // The field name 'image' MUST match the one used in the ESP32-CAM code.
 
   if (!req.file) {
-    return res.status(400).json({ message: 'No image uploaded.' });
+    return res.status(400).json({ message: 'Žiadny obrázok nebol nahraný.' });
   }
 
   const imagePath = req.file.path;
@@ -55,7 +55,7 @@ app.post('/api/parking/entry-request', upload.single('image'), async (req, res) 
   // 1. Perform OCR
   const licensePlate = await recognizeLicensePlate(imagePath);
   if (!licensePlate) {
-    return res.status(500).json({ message: 'Failed to recognize license plate.' });
+    return res.status(500).json({ message: 'Nepodarilo sa rozpoznať ŠPZ.' });
   }
 
   // 2. Save to Database
@@ -65,7 +65,7 @@ app.post('/api/parking/entry-request', upload.single('image'), async (req, res) 
   db.run(query, [licensePlate, entryTime, imagePath], async function(err) {
     if (err) {
       console.error('Database error:', err.message);
-      return res.status(500).json({ message: 'Failed to save parking entry.' });
+      return res.status(500).json({ message: 'Nepodarilo sa uložiť záznam o parkovaní.' });
     }
 
     console.log(`New entry created with ID: ${this.lastID}`);
@@ -75,7 +75,7 @@ app.post('/api/parking/entry-request', upload.single('image'), async (req, res) 
 
     // 4. Send Success Response
     res.status(200).json({
-      message: 'Entry processed successfully.',
+      message: 'Vstup bol úspešne spracovaný.',
       licensePlate: licensePlate,
       entryTime: entryTime
     });
@@ -126,19 +126,72 @@ app.get('/api/slots', (req, res) => {
     });
 });
 
-// API endpoint to create a booking (anonymous)
-app.post('/api/bookings', (req, res) => {
-    const { slotId, date, startTime, endTime, price } = req.body;
+// Basic license plate validation
+function isValidLicensePlate(plate) {
+    // Example: Allows alphanumeric characters and hyphens, 5 to 8 characters long
+    const regex = /^[a-zA-Z0-9-]{5,8}$/;
+    return regex.test(plate);
+}
 
-    if (!slotId || !date || !startTime || !endTime || !price) {
-        return res.status(400).json({ message: 'All booking fields are required.' });
+// API endpoint to check reservation and open barrier
+app.post('/api/check-reservation', upload.single('image'), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: 'Žiadny obrázok nebol nahraný.' });
     }
 
-    const bookingQuery = 'INSERT INTO bookings (slot_id, booking_date, start_time, end_time, total_price) VALUES (?, ?, ?, ?, ?)';
-    db.run(bookingQuery, [slotId, date, startTime, endTime, price], function(err) {
+    const imagePath = req.file.path;
+    console.log(`Received image for reservation check, saved to: ${imagePath}`);
+
+    try {
+        const licensePlate = await recognizeLicensePlate(imagePath);
+        if (!licensePlate) {
+            return res.status(400).json({ message: 'Nepodarilo sa rozpoznať ŠPZ.' });
+        }
+
+        const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+        const query = "SELECT * FROM bookings WHERE license_plate = ? AND booking_date = ?";
+        
+        db.get(query, [licensePlate, today], async (err, row) => {
+            if (err) {
+                console.error('Database error:', err.message);
+                return res.status(500).json({ message: 'Chyba databázy pri hľadaní rezervácie.' });
+            }
+
+            if (row) {
+                // Found a reservation for today
+                console.log(`Reservation found for license plate: ${licensePlate}`);
+                await openBarrier();
+                res.status(200).json({ message: 'Rezervácia nájdená. Rampa sa otvára.' });
+            } else {
+                // No reservation found
+                console.log(`No reservation found for license plate: ${licensePlate}`);
+                res.status(404).json({ message: 'Žiadna rezervácia pre túto ŠPZ na dnes nebola nájdená.' });
+            }
+        });
+    } catch (error) {
+        console.error('Error during reservation check:', error);
+        res.status(500).json({ message: 'Interná chyba servera pri kontrole rezervácie.' });
+    }
+});
+
+
+// API endpoint to create a booking (anonymous)
+app.post('/api/bookings', (req, res) => {
+    const { slotId, licensePlate, date, startTime, endTime, price } = req.body;
+
+    if (!slotId || !licensePlate || !date || !startTime || !endTime || !price) {
+        return res.status(400).json({ message: 'Všetky polia pre rezerváciu sú povinné.' });
+    }
+
+    if (!isValidLicensePlate(licensePlate)) {
+        return res.status(400).json({ message: 'Neplatný formát ŠPZ.' });
+    }
+
+    const bookingQuery = 'INSERT INTO bookings (slot_id, license_plate, booking_date, start_time, end_time, total_price) VALUES (?, ?, ?, ?, ?, ?)';
+    db.run(bookingQuery, [slotId, licensePlate, date, startTime, endTime, price], function(err) {
         if (err) {
             console.error('Error creating booking:', err);
-            return res.status(500).json({ message: 'Internal server error.' });
+            return res.status(500).json({ message: 'Interná chyba servera.' });
         }
         
         const updateSlotQuery = "UPDATE parking_slots SET status = 'reserved' WHERE id = ?";
@@ -146,9 +199,9 @@ app.post('/api/bookings', (req, res) => {
             if (err) {
                 // Ideally, you'd handle this failure, e.g., by rolling back the booking
                 console.error('Error updating slot status:', err);
-                return res.status(500).json({ message: 'Booking created, but failed to update slot status.' });
+                return res.status(500).json({ message: 'Rezervácia bola vytvorená, ale nepodarilo sa aktualizovať stav parkovacieho miesta.' });
             }
-            res.status(201).json({ message: 'Booking created successfully.' });
+            res.status(201).json({ message: 'Rezervácia bola úspešne vytvorená.' });
         });
     });
 });

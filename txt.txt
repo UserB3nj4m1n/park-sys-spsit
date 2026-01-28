@@ -1,1 +1,0 @@
-flex flex-1 justify-center p-4 sm:p-6 lg:p-8

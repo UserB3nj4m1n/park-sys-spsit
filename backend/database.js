@@ -2,7 +2,6 @@ const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./database.db');
 
 db.serialize(() => {
-    // Table for the automatic OCR entry system
     db.run(`CREATE TABLE IF NOT EXISTS parking_entries (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         license_plate TEXT NOT NULL,
@@ -11,7 +10,6 @@ db.serialize(() => {
         exit_time DATETIME
     )`);
 
-    // Table for the manual booking system (simplified)
     db.run(`CREATE TABLE IF NOT EXISTS parking_slots (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         slot_name TEXT NOT NULL,
@@ -20,16 +18,37 @@ db.serialize(() => {
         status TEXT NOT NULL DEFAULT 'available'
     )`);
 
-    // Simplified bookings table without user_id
+    // Added license_plate column to bookings
     db.run(`CREATE TABLE IF NOT EXISTS bookings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         slot_id INTEGER,
+        license_plate TEXT,
         start_time TEXT,
         end_time TEXT,
         booking_date TEXT,
         total_price REAL,
-        FOREIGN KEY (slot_id) REFERENCES parking_slots (id)
+        FOREIGN KEY (slot_id) REFERENCES parking_slots(id)
     )`);
+
+    // Clear existing slots to prevent duplication on restart
+    db.run("DELETE FROM parking_slots");
+    db.run("DELETE FROM sqlite_sequence WHERE name='parking_slots'");
+
+
+    // Insert some sample data into parking_slots
+    const slots = [
+        { name: 'A1', level: 'A', type: 'car' },
+        { name: 'A2', level: 'A', type: 'car' },
+        { name: 'A3', level: 'A', type: 'motorcycle' },
+        { name: 'B1', level: 'B', type: 'car' },
+        { name: 'B2', level: 'B', type: 'car' },
+    ];
+
+    const stmt = db.prepare("INSERT INTO parking_slots (slot_name, level, type, status) VALUES (?, ?, ?, 'available')");
+    slots.forEach(slot => {
+        stmt.run(slot.name, slot.level, slot.type);
+    });
+    stmt.finalize();
 });
 
 module.exports = db;
