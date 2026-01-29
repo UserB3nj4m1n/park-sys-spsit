@@ -163,42 +163,54 @@ document.addEventListener('DOMContentLoaded', () => {
         summaryPriceEl.textContent = `${price.toFixed(2)} €`;
     }
 
-    // --- Funkcie na kontrolu správnosti vstupov ---
-    function isValidEmail(email) {
+    // --- Funkcie na kontrolu správnosti vstupov (Validácia) ---
+    function validateEmail(email) {
+        if (!email) return "Emailová adresa je povinná.";
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
+        if (!regex.test(email)) return "Neplatný formát emailu.";
+        return null; // null znamená, že je všetko v poriadku
     }
 
-    function isValidLicensePlate(plate) {
-        const regex = /^[a-zA-Z0-9-]{5,8}$/;
-        return regex.test(plate);
+    function validateLicensePlate(plate) {
+        if (!plate) return "EČV je povinné.";
+        const regex = /^[A-Z0-9-]{5,8}$/;
+        if (!regex.test(plate.toUpperCase())) return "Neplatný formát EČV (napr. KE-123AB).";
+        return null;
     }
 
-    function isValidCardholderName(name) {
-        return name.trim().length > 2;
+    function validateCardholderName(name) {
+        if (!name) return "Meno držiteľa karty je povinné.";
+        if (name.trim().split(' ').length < 2) return "Zadajte meno aj priezvisko.";
+        return null;
     }
 
-    function isValidCardNumber(number) {
-        const regex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
-        // Tu by sa v reálnej apke hodil Luhnov algoritmus, ale toto stačí.
-        return regex.test(number.replace(/\s/g, ''));
+    function validateCardNumber(number) {
+        if (!number) return "Číslo karty je povinné.";
+        // Jednoduchý regex na kontrolu formátu (neoveruje platnosť karty)
+        const regex = /^[0-9]{13,19}$/;
+        if (!regex.test(number.replace(/\s/g, ''))) return "Neplatné číslo karty.";
+        return null;
     }
 
-    function isValidExpiryDate(date) {
+    function validateExpiryDate(date) {
+        if (!date) return "Dátum expirácie je povinný.";
         const regex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
-        if (!regex.test(date)) return false;
+        if (!regex.test(date)) return "Neplatný formát (MM/YY).";
         
         const [month, year] = date.split('/');
         const expiry = new Date(`20${year}`, month - 1);
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // Nulujem čas, aby som porovnával iba dátum.
-        
-        return expiry >= today;
+        today.setHours(23, 59, 59, 999); // Karta je platná do konca posledného dňa mesiaca
+
+        if (expiry < today) return "Karta je exspirovaná.";
+        return null;
     }
 
-    function isValidCvv(cvv) {
+    function validateCvv(cvv) {
+        if (!cvv) return "CVV je povinné.";
         const regex = /^[0-9]{3,4}$/;
-        return regex.test(cvv);
+        if (!regex.test(cvv)) return "CVV musí mať 3 alebo 4 číslice.";
+        return null;
     }
 
 
@@ -210,32 +222,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let isFormValid = true;
 
-        // --- Kontrola, či je všetko vyplnené správne ---
-        const validateField = (input, validationFn) => {
-            const value = input.value.trim();
-            // Najprv zmažem červený rámik, ak tam bol
-            input.classList.remove('border-red-500');
+        // --- Nová, podrobnejšia validačná logika ---
+        const validateField = (inputElement, validationFunction) => {
+            const value = inputElement.value;
+            const errorElement = document.getElementById(`${inputElement.id}-error`);
+            const errorMessage = validationFunction(value);
 
-            if (!validationFn(value)) {
-                input.classList.add('border-red-500');
+            // Najprv skryjem starú chybu a odstránim červený rámik
+            errorElement.classList.add('hidden');
+            errorElement.textContent = '';
+            inputElement.classList.remove('border-red-500');
+
+            if (errorMessage) {
+                // Ak validácia vráti chybovú správu, zobrazím ju
                 isFormValid = false;
+                inputElement.classList.add('border-red-500');
+                errorElement.textContent = errorMessage;
+                errorElement.classList.remove('hidden');
             }
         };
         
-        validateField(emailInput, isValidEmail);
-        validateField(licensePlateInput, isValidLicensePlate);
-        validateField(cardholderNameInput, isValidCardholderName);
-        validateField(cardNumberInput, isValidCardNumber);
-        validateField(cardExpDateInput, isValidExpiryDate);
-        validateField(cardCvvInput, isValidCvv);
+        // Spustím validáciu pre každé pole
+        validateField(emailInput, validateEmail);
+        validateField(licensePlateInput, validateLicensePlate);
+        validateField(cardholderNameInput, validateCardholderName);
+        validateField(cardNumberInput, validateCardNumber);
+        validateField(cardExpDateInput, validateExpiryDate);
+        validateField(cardCvvInput, validateCvv);
 
         if (!isFormValid) {
-            return; // Ak niečo chýba, tak sa ďalej nejde
+            return; // Ak niečo chýba alebo je zlé, tak sa ďalej nejde
         }
 
         const bookingData = {
             slotId: selectedSlot.id,
-            licensePlate: licensePlateInput.value.trim(),
+            licensePlate: licensePlateInput.value.trim().toUpperCase(),
             email: emailInput.value.trim(),
             cardholderName: cardholderNameInput.value.trim(),
             cardNumber: cardNumberInput.value.trim(),
@@ -249,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 endDate.setHours(h + (parseInt(durationInput.value, 10) || 0), m);
                 return endDate.toLocaleTimeString('sk-SK', { hour: '2-digit', minute: '2-digit', hour12: false });
             })(),
-            price: parseFloat(summaryPriceEl.textContent.replace('€', ''))
+            price: parseFloat(summaryPriceEl.textContent.replace('€', '').trim())
         };
 
         confirmBookingButton.disabled = true;
@@ -263,10 +284,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const result = await response.json();
-            if (!response.ok) throw new Error(result.message || 'Rezervácia zlyhala');
+            if (!response.ok) throw new Error(result.sprava || 'Rezervácia zlyhala');
 
             alert('Rezervácia prebehla úspešne!');
+            // Reset formulára a parkoviska
             selectedSlot = null;
+            document.getElementById('summary-with-slot').querySelectorAll('input').forEach(input => input.value = '');
             fetchSlots();
             bookingFormContainer.classList.add('opacity-0');
             setTimeout(() => {
