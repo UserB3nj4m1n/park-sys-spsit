@@ -14,7 +14,8 @@ db.serialize(() => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         slot_name TEXT NOT NULL,
         level TEXT NOT NULL,
-        status TEXT NOT NULL DEFAULT 'available'
+        status TEXT NOT NULL DEFAULT 'available',
+        barrier_device_id TEXT
     )`);
 
     db.run(`CREATE TABLE IF NOT EXISTS bookings (

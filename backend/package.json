@@ -24,7 +24,7 @@
   "homepage": "https://github.com/UserB3nj4m1n/park-sys-spsit#readme",
   "dependencies": {
     "axios": "^1.13.2",
-    "body-parser": "^2.2.1",
+    "body-parser": "^2.2.2",
     "cors": "^2.8.5",
     "express": "^5.2.1",
     "multer": "^2.0.2",
