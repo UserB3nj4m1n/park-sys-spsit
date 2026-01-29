@@ -143,9 +143,20 @@
                                             <label for="date" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Dátum</label>
                                             <input type="date" id="date" name="date" class="mt-1 form-input block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500">
                                         </div>
-                                        <div>
-                                            <label for="start-time" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Čas začiatku</label>
-                                            <input type="time" id="start-time" name="start-time" class="mt-1 form-input block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500" value="10:00">
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label for="start-hour" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Start Hour</label>
+                                                <select id="start-hour" name="start-hour" class="mt-1 form-select block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500">
+                                                    <!-- Options will be dynamically inserted by JS -->
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label for="start-minute" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Start Minute</label>
+                                                <select id="start-minute" name="start-minute" class="mt-1 form-select block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500">
+                                                    <option value="00">00</option>
+                                                    <option value="30">30</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

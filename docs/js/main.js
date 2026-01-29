@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const cardExpDateInput = document.getElementById('card-exp-date');
     const cardCvvInput = document.getElementById('card-cvv');
     const dateInput = document.getElementById('date');
-    const startTimeInput = document.getElementById('start-time');
+    const startHourInput = document.getElementById('start-hour');
+    const startMinuteInput = document.getElementById('start-minute');
     const durationInput = document.getElementById('duration');
     const summaryPriceEl = document.getElementById('summary-price');
     const confirmBookingButton = document.getElementById('confirm-booking-button');
@@ -26,9 +27,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initialization ---
     function initialize() {
+        populateHourOptions();
         fetchSlots();
         setupEventListeners();
         setInitialDateTime();
+    }
+
+    function populateHourOptions() {
+        if (!startHourInput) return;
+        for (let i = 0; i < 24; i++) {
+            const hour = String(i).padStart(2, '0');
+            const option = new Option(hour, hour);
+            startHourInput.add(option);
+        }
     }
 
     // --- Data Fetching ---
@@ -96,7 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Event Handlers & Logic ---
     function setupEventListeners() {
         dateInput?.addEventListener('change', updateSummary);
-        startTimeInput?.addEventListener('input', updateSummary);
+        startHourInput?.addEventListener('change', updateSummary);
+        startMinuteInput?.addEventListener('change', updateSummary);
         durationInput?.addEventListener('input', updateSummary);
         confirmBookingButton?.addEventListener('click', handleConfirmBooking);
     }
@@ -106,9 +118,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
-        if(dateInput) {
+        
+        if (dateInput) {
             dateInput.value = `${year}-${month}-${day}`;
             dateInput.min = `${year}-${month}-${day}`;
+        }
+
+        if (startHourInput) {
+            const currentHour = String(today.getHours()).padStart(2, '0');
+            startHourInput.value = currentHour;
         }
     }
 
@@ -216,6 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         // --- End Data Retrieval and Validation ---
 
+        const startTime = `${startHourInput.value}:${startMinuteInput.value}`;
 
         const bookingData = {
             slotId: selectedSlot.id,
@@ -226,9 +245,9 @@ document.addEventListener('DOMContentLoaded', () => {
             cardExpDate: cardExpDate,
             cardCvv: cardCvv,
             date: dateInput.value,
-            startTime: startTimeInput.value,
+            startTime: startTime,
             endTime: (() => {
-                const [h, m] = startTimeInput.value.split(':').map(Number);
+                const [h, m] = startTime.split(':').map(Number);
                 const endDate = new Date();
                 endDate.setHours(h + (parseInt(durationInput.value, 10) || 0), m);
                 return endDate.toLocaleTimeString('sk-SK', { hour: '2-digit', minute: '2-digit', hour12: false });
