@@ -11,6 +11,8 @@ const port = 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '../docs')));
+
 
 // Skontrolujem, či existuje priečinok 'uploads', a ak nie, tak ho vytvorím
 const fs = require('fs');
@@ -184,32 +186,57 @@ app.get('/api/barrier/command', (req, res) => {
     }
 });
 
+// --- Nová logika pre zrušenie rezervácie ---
+const cancellationPagePath = path.join(__dirname, '../docs/cancel.html');
+
+// Pomocná funkcia na odoslanie stránky s nahradeným obsahom
+function sendCancellationPage(res, status, icon, title, text) {
+    fs.readFile(cancellationPagePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error("Chyba pri čítaní súboru cancel.html:", err);
+            return res.status(500).send("Nastala interná chyba servera.");
+        }
+        
+        let html = data.replace('{{ICON}}', icon);
+        html = html.replace('{{MESSAGE_TITLE}}', title);
+        html = html.replace('{{MESSAGE_TEXT}}', text);
+        
+        res.status(status).send(html);
+    });
+}
+
 app.get('/api/bookings/cancel/:token', (req, res) => {
     const { token } = req.params;
+
     db.get("SELECT * FROM bookings WHERE cancellation_token = ? AND status = 'confirmed'", [token], (err, booking) => {
         if (err) {
-            return res.status(500).send('<h1>Chyba</h1><p>Nastala chyba v databáze.</p>');
+            sendCancellationPage(res, 500, 'error', 'Chyba', 'Nastala chyba v databáze. Skúste to prosím znova neskôr.');
+            return;
         }
         if (!booking) {
-            return res.status(404).send('<h1>Nenájdené</h1><p>Táto rezervácia nebola nájdená alebo už bola zrušená.</p>');
+            sendCancellationPage(res, 404, 'help', 'Nenájdené', 'Táto rezervácia nebola nájdená alebo už bola zrušená.');
+            return;
         }
 
         db.serialize(() => {
             db.run("UPDATE bookings SET status = 'cancelled' WHERE id = ?", [booking.id], function(err) {
                 if (err) {
-                    return res.status(500).send('<h1>Chyba</h1><p>Nepodarilo sa zmeniť stav rezervácie.</p>');
+                    sendCancellationPage(res, 500, 'error', 'Chyba', 'Nepodarilo sa zmeniť stav rezervácie.');
+                    return;
                 }
                 db.run("UPDATE parking_slots SET status = 'available' WHERE id = ?", [booking.slot_id], function(err) {
                     if (err) {
                         console.error(`Nepodarilo sa uvoľniť miesto ${booking.slot_id} pre zrušenú rezerváciu ${booking.id}`);
-                        return res.status(500).send('<h1>Chyba</h1><p>Rezervácia bola zrušená, ale parkovacie miesto sa nepodarilo uvoľniť. Kontaktujte podporu.</p>');
+                        sendCancellationPage(res, 500, 'error', 'Chyba', 'Rezervácia bola zrušená, ale parkovacie miesto sa nepodarilo uvoľniť. Kontaktujte podporu.');
+                        return;
                     }
-                    res.send('<h1>Úspech</h1><p>Vaša rezervácia bola úspešne zrušená.</p>');
+                    sendCancellationPage(res, 200, 'check_circle', 'Úspech', 'Vaša rezervácia bola úspešne zrušená.');
                 });
             });
         });
     });
 });
+
 
 if (require.main === module) {
     app.listen(port, () => {
