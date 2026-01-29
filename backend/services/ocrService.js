@@ -1,20 +1,20 @@
-/// In backend/services/ocrService.js
+// Súbor: backend/services/ocrService.js
 const { recognizeLicensePlate: ocrRecognize } = require('../ocr/ocr.js'); 
 
 async function recognizeLicensePlate(imagePath) {
   try {
-    console.log(`Performing OCR on image: ${imagePath}`);
+    console.log(`Spúšťam OCR na obrázku: ${imagePath}`);
     const licensePlate = await ocrRecognize(imagePath);
     
     if (!licensePlate) {
-      throw new Error('OCR did not detect a license plate.');
+      throw new Error('OCR nerozoznalo žiadnu ŠPZ.');
     }
 
-    console.log(`OCR Result: ${licensePlate}`);
+    console.log(`Výsledok z OCR: ${licensePlate}`);
     return licensePlate;
   } catch (error) {
-    console.error('OCR Service Error:', error.message);
-    // Return null or throw the error to be handled by the controller
+    console.error('Chyba v OCR službe:', error.message);
+    // Vrátim null, aby aplikácia nespadla a v server.js to budem vedieť ošetriť
     return null; 
   }
 }

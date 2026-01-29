@@ -14,10 +14,10 @@ function initializeTheme() {
     }
 }
 
-// Initialize theme on script load
+// Hneď na začiatku nastavím tému, aby nepreblikla
 initializeTheme();
 
-// Add event listener for the theme toggle button
+// Počkám, kým sa načíta celá stránka a až potom priradím kliknutie na tlačidlo
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggleButton = document.getElementById('theme-toggle');
     if (themeToggleButton) {

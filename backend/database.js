@@ -36,12 +36,12 @@ db.serialize(() => {
         FOREIGN KEY (slot_id) REFERENCES parking_slots(id)
     )`);
 
-    // Clear existing slots to prevent duplication on restart
+    // Vymažem staré miesta, aby sa mi pri každom reštarte servera nevytvárali nové a nové
     db.run("DELETE FROM parking_slots");
     db.run("DELETE FROM sqlite_sequence WHERE name='parking_slots'");
 
 
-    // Insert some sample data into parking_slots
+    // Vložím nejaké testovacie dáta, aby parkovisko nebolo prázdne
     const slots = [
         { name: 'A1', level: 'A'},
         { name: 'A2', level: 'A'},

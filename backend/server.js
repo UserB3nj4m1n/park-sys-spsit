@@ -12,14 +12,14 @@ const port = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// Create an 'uploads' directory if it doesn't exist
+// Skontrolujem, či existuje priečinok 'uploads', a ak nie, tak ho vytvorím
 const fs = require('fs');
 const uploadsDir = './uploads';
 if (!fs.existsSync(uploadsDir)){
     fs.mkdirSync(uploadsDir);
 }
 
-// --- Multer Configuration ---
+// --- Nastavenie pre nahrávanie súborov (Multer) ---
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
@@ -30,52 +30,52 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// --- Static File Serving ---
+// --- Sprístupnenie priečinku 'uploads' ako statického ---
 app.use('/uploads', express.static('uploads'));
 
 const db = require('./database.js');
 const { recognizeLicensePlate } = require('./services/ocrService');
 const { sendBookingConfirmation } = require('./services/emailService');
 
-let barrierCommand = 'wait'; // This will hold the command for the barrier ESP32
+let barrierCommand = 'wait'; // Táto premenná drží príkaz pre ESP32, čo má robiť so závorou
 
-// API endpoint to get all parking slots
+// Endpoint, kde si frontend pýta všetky parkovacie miesta
 app.get('/api/slots', (req, res) => {
     db.all("SELECT * FROM parking_slots", [], (err, rows) => {
         if (err) {
             res.status(500).json({ "error": err.message });
             return;
         }
-        res.json({ "message": "success", "data": rows });
+        res.json({ "sprava": "úspech", "data": rows });
     });
 });
 
-// Basic license plate validation
+// Jednoduchá kontrola správnosti ŠPZ
 function isValidLicensePlate(plate) {
     const regex = /^[a-zA-Z0-9-]{5,8}$/;
     return regex.test(plate);
 }
 
-// API endpoint to check reservation and open barrier
+// Endpoint pre ESP32, kde pošle fotku na kontrolu rezervácie
 app.post('/api/check-reservation', bodyParser.raw({ type: '*/*', limit: '10mb' }), async (req, res) => {
     if (!req.body || req.body.length === 0) {
-        return res.status(400).json({ message: 'Žiadny obrázok nebol nahraný.' });
+        return res.status(400).json({ sprava: 'Žiadny obrázok nebol nahraný.' });
     }
 
-    // Write the received raw image buffer to a temporary file
+    // Obrázok, čo prišiel z kamery, si uložím do súboru
     const imagePath = path.join(uploadsDir, `esp32-cam-${Date.now()}.jpg`);
     fs.writeFile(imagePath, req.body, async (err) => {
         if (err) {
-            console.error('Error saving image:', err);
-            return res.status(500).json({ message: 'Chyba pri ukladaní obrázka.' });
+            console.error('Chyba pri ukladaní obrázka z kamery:', err);
+            return res.status(500).json({ sprava: 'Chyba pri ukladaní obrázka.' });
         }
 
-        console.log(`Received image for reservation check, saved to: ${imagePath}`);
+        console.log(`Prišla fotka z kamery na kontrolu, uložil som ju do: ${imagePath}`);
         
         try {
             const licensePlate = await recognizeLicensePlate(imagePath);
             if (!licensePlate) {
-                return res.status(400).json({ message: 'Nepodarilo sa rozpoznať ŠPZ.' });
+                return res.status(400).json({ sprava: 'Nepodarilo sa rozpoznať ŠPZ.' });
             }
 
             const today = new Date().toISOString().slice(0, 10);
@@ -83,27 +83,27 @@ app.post('/api/check-reservation', bodyParser.raw({ type: '*/*', limit: '10mb' }
             
             db.get(query, [licensePlate, today], (dbErr, row) => {
                 if (dbErr) {
-                    console.error('Database error:', dbErr.message);
-                    return res.status(500).json({ message: 'Chyba databázy pri hľadaní rezervácie.' });
+                    console.error('Chyba v databáze:', dbErr.message);
+                    return res.status(500).json({ sprava: 'Chyba databázy pri hľadaní rezervácie.' });
                 }
 
                 if (row) {
-                    console.log(`Reservation found for license plate: ${licensePlate}`);
-                    barrierCommand = 'open'; // Set the command for the ESP32 to retrieve
-                    res.status(200).json({ message: 'Rezervácia nájdená. Príkaz na otvorenie rampy bol pripravený.' });
+                    console.log(`Super, našiel som rezerváciu pre ŠPZ: ${licensePlate}`);
+                    barrierCommand = 'open'; // Pripravím príkaz na otvorenie rampy pre ESP32
+                    res.status(200).json({ sprava: 'Rezervácia nájdená. Príkaz na otvorenie rampy bol pripravený.' });
                 } else {
-                    console.log(`No reservation found for license plate: ${licensePlate}`);
-                    res.status(404).json({ message: 'Žiadna rezervácia pre túto ŠPZ na dnes nebola nájdená.' });
+                    console.log(`Nenašiel som dnešnú rezerváciu pre ŠPZ: ${licensePlate}`);
+                    res.status(404).json({ sprava: 'Žiadna rezervácia pre túto ŠPZ na dnes nebola nájdená.' });
                 }
             });
         } catch (error) {
-            console.error('Error during reservation check:', error);
-            res.status(500).json({ message: 'Interná chyba servera pri kontrole rezervácie.' });
+            console.error('Nastala chyba pri kontrole rezervácie:', error);
+            res.status(500).json({ sprava: 'Interná chyba servera pri kontrole rezervácie.' });
         }
     });
 });
 
-// API endpoint to create a booking
+// Endpoint, kam frontend posiela dáta z formulára na vytvorenie rezervácie
 app.post('/api/bookings', (req, res) => {
     const { 
         slotId, licensePlate, email, cardholderName, cardNumber, cardExpDate, cardCvv, 
@@ -111,13 +111,13 @@ app.post('/api/bookings', (req, res) => {
     } = req.body;
 
     if (![slotId, licensePlate, email, cardholderName, cardNumber, cardExpDate, cardCvv, date, startTime, endTime, price].every(Boolean)) {
-        return res.status(400).json({ message: 'Všetky polia pre rezerváciu sú povinné.' });
+        return res.status(400).json({ sprava: 'Všetky polia pre rezerváciu sú povinné.' });
     }
     if (!isValidLicensePlate(licensePlate)) {
-        return res.status(400).json({ message: 'Neplatný formát ŠPZ.' });
+        return res.status(400).json({ sprava: 'Neplatný formát ŠPZ.' });
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        return res.status(400).json({ message: 'Neplatný formát emailu.' });
+        return res.status(400).json({ sprava: 'Neplatný formát emailu.' });
     }
 
     const cancellationToken = crypto.randomBytes(16).toString('hex');
@@ -134,44 +134,44 @@ app.post('/api/bookings', (req, res) => {
 
     db.run(bookingQuery, params, function(err) {
         if (err) {
-            console.error('Error creating booking:', err);
-            return res.status(500).json({ message: 'Interná chyba servera.' });
+            console.error('Chyba pri vytváraní rezervácie:', err);
+            return res.status(500).json({ sprava: 'Interná chyba servera.' });
         }
         
         const updateSlotQuery = "UPDATE parking_slots SET status = 'reserved' WHERE id = ?";
         db.run(updateSlotQuery, [slotId], function(err) {
             if (err) {
-                console.error('Error updating slot status:', err);
-                return res.status(500).json({ message: 'Rezervácia bola vytvorená, ale nepodarilo sa aktualizovať stav parkovacieho miesta.' });
+                console.error('Chyba pri zmene stavu parkovacieho miesta:', err);
+                return res.status(500).json({ sprava: 'Rezervácia bola vytvorená, ale nepodarilo sa aktualizovať stav parkovacieho miesta.' });
             }
 
             db.get("SELECT slot_name FROM parking_slots WHERE id = ?", [slotId], (err, slot) => {
                 if (err || !slot) {
-                    console.error('Could not find slot to send email.');
+                    console.error('Nepodarilo sa nájsť miesto, ku ktorému poslať email.');
                 } else {
                     sendBookingConfirmation({
                         email, licensePlate, booking_date: date, startTime, endTime,
                         total_price: price, cancellation_token: cancellationToken, slot_name: slot.slot_name
                     }).catch(emailError => {
-                        console.error("Failed to send confirmation email:", emailError);
+                        console.error("Nepodarilo sa odoslať potvrdzovací email:", emailError);
                     });
                 }
             });
 
-            res.status(201).json({ message: 'Rezervácia bola úspešne vytvorená.' });
+            res.status(201).json({ sprava: 'Rezervácia bola úspešne vytvorená.' });
         });
     });
 });
 
-// API endpoint for cancellation
+// Endpoint na zrušenie rezervácie (toto je len na testovanie)
 app.get('/api/debug/open-barrier', (req, res) => {
     barrierCommand = 'open';
-    res.status(200).json({ message: 'Príkaz na otvorenie závory nastavený.' });
+    res.status(200).json({ sprava: 'Príkaz na otvorenie závory nastavený.' });
 });
 
 app.get('/api/barrier/command', (req, res) => {
     res.send(barrierCommand);
-    // Reset the command after it has been sent
+    // Vynulujem príkaz pre rampu, aby sa neotvárala stále dokola
     if (barrierCommand === 'open') {
         barrierCommand = 'wait';
     }
@@ -181,23 +181,23 @@ app.get('/api/bookings/cancel/:token', (req, res) => {
     const { token } = req.params;
     db.get("SELECT * FROM bookings WHERE cancellation_token = ? AND status = 'confirmed'", [token], (err, booking) => {
         if (err) {
-            return res.status(500).send('<h1>Error</h1><p>A database error occurred.</p>');
+            return res.status(500).send('<h1>Chyba</h1><p>Nastala chyba v databáze.</p>');
         }
         if (!booking) {
-            return res.status(404).send('<h1>Not Found</h1><p>This booking was not found or has already been cancelled.</p>');
+            return res.status(404).send('<h1>Nenájdené</h1><p>Táto rezervácia nebola nájdená alebo už bola zrušená.</p>');
         }
 
         db.serialize(() => {
             db.run("UPDATE bookings SET status = 'cancelled' WHERE id = ?", [booking.id], function(err) {
                 if (err) {
-                    return res.status(500).send('<h1>Error</h1><p>Failed to update booking status.</p>');
+                    return res.status(500).send('<h1>Chyba</h1><p>Nepodarilo sa zmeniť stav rezervácie.</p>');
                 }
                 db.run("UPDATE parking_slots SET status = 'available' WHERE id = ?", [booking.slot_id], function(err) {
                     if (err) {
-                        console.error(`Failed to free slot ${booking.slot_id} for cancelled booking ${booking.id}`);
-                        return res.status(500).send('<h1>Error</h1><p>Booking was cancelled, but the parking slot could not be freed. Please contact support.</p>');
+                        console.error(`Nepodarilo sa uvoľniť miesto ${booking.slot_id} pre zrušenú rezerváciu ${booking.id}`);
+                        return res.status(500).send('<h1>Chyba</h1><p>Rezervácia bola zrušená, ale parkovacie miesto sa nepodarilo uvoľniť. Kontaktujte podporu.</p>');
                     }
-                    res.send('<h1>Success</h1><p>Your booking has been successfully cancelled.</p>');
+                    res.send('<h1>Úspech</h1><p>Vaša rezervácia bola úspešne zrušená.</p>');
                 });
             });
         });
@@ -206,7 +206,7 @@ app.get('/api/bookings/cancel/:token', (req, res) => {
 
 if (require.main === module) {
     app.listen(port, () => {
-        console.log(`Server is running on http://localhost:${port}`);
+        console.log(`Server beží na adrese http://localhost:${port}`);
     });
 }
 

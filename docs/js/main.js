@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- DOM Elements ---
+    // --- DOM Elementy ---
     const parkingMap = document.getElementById('parking-map');
     const bookingFormContainer = document.getElementById('booking-form-container');
     const summaryNoSlot = document.getElementById('summary-no-slot');
     const summaryWithSlot = document.getElementById('summary-with-slot');
 
-    // Form Elements
+    // Tieto premenné si držia elementy z formulára
     const summarySlotEl = document.getElementById('summary-slot');
     const emailInput = document.getElementById('email');
     const licensePlateInput = document.getElementById('license-plate');
@@ -20,12 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryPriceEl = document.getElementById('summary-price');
     const confirmBookingButton = document.getElementById('confirm-booking-button');
 
-    // --- State ---
+    // --- Premenné, čo si pamätajú stav stránky ---
     let allSlots = [];
     let selectedSlot = null;
     const pricePerHour = 5;
 
-    // --- Initialization ---
+    // --- Funkcie, čo sa spustia na začiatku ---
     function initialize() {
         populateHourOptions();
         fetchSlots();
@@ -42,24 +42,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Data Fetching ---
+    // --- Komunikácia so serverom ---
     async function fetchSlots() {
         try {
             const response = await fetch('/api/slots');
-            if (!response.ok) throw new Error('Network response was not ok');
+            if (!response.ok) throw new Error('Server neodpovedal správne');
             const data = await response.json();
             allSlots = data.data;
             renderSlots();
         } catch (error) {
-            console.error('Error fetching slots:', error);
+            console.error('Chyba, nepodarilo sa načítať parkovacie miesta:', error);
             if (parkingMap) parkingMap.innerHTML = '<p class="sm:col-span-2 text-red-500">Pripojenie na server nefunguje</p>';
         }
     }
 
-    // --- Rendering ---
+    // --- Vykreslenie dát na stránku ---
     function renderSlots() {
         if (!parkingMap) return;
-        parkingMap.innerHTML = ''; // Clear previous content
+        parkingMap.innerHTML = ''; // Najprv všetko vymažem, aby som nemal duplikáty
 
         allSlots.forEach(slot => {
             const isAvailable = slot.status === 'available';
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'directions_car';
     }
 
-    // --- Event Handlers & Logic ---
+    // --- Logika stránky a kliknutia ---
     function setupEventListeners() {
         dateInput?.addEventListener('change', updateSummary);
         startHourInput?.addEventListener('change', updateSummary);
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleSlotSelection(slot) {
         selectedSlot = slot;
-        renderSlots(); // Re-render to show selection
+        renderSlots(); // Vykreslím parkovisko nanovo, aby sa zvýraznilo vybrané miesto
         showBookingForm();
         updateSummary();
     }
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         summaryPriceEl.textContent = `€${price.toFixed(2)}`;
     }
 
-    // --- Validation Functions ---
+    // --- Funkcie na kontrolu správnosti vstupov ---
     function isValidEmail(email) {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function isValidCardNumber(number) {
         const regex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
-        // A simple Luhn algorithm check would be better for a real app.
+        // Tu by sa v reálnej apke hodil Luhnov algoritmus, ale toto stačí.
         return regex.test(number.replace(/\s/g, ''));
     }
 
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const [month, year] = date.split('/');
         const expiry = new Date(`20${year}`, month - 1);
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // Compare dates only
+        today.setHours(0, 0, 0, 0); // Nulujem čas, aby som porovnával iba dátum.
         
         return expiry >= today;
     }
@@ -187,7 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const regex = /^[0-9]{3,4}$/;
         return regex.test(cvv);
     }
-    // --- End Validation Functions ---
 
 
     async function handleConfirmBooking() {
@@ -198,10 +197,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let isFormValid = true;
 
-        // --- Validation Logic ---
+        // --- Kontrola, či je všetko vyplnené správne ---
         const validateField = (input, validationFn) => {
             const value = input.value.trim();
-            // Always remove the error class first
+            // Najprv zmažem červený rámik, ak tam bol
             input.classList.remove('border-red-500');
 
             if (!validationFn(value)) {
@@ -218,9 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
         validateField(cardCvvInput, isValidCvv);
 
         if (!isFormValid) {
-            return; // Stop if any field is invalid
+            return; // Ak niečo chýba, tak sa ďalej nejde
         }
-        // --- End Validation ---
 
         const bookingData = {
             slotId: selectedSlot.id,
@@ -264,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 500);
 
         } catch (error) {
-            console.error('Error during booking:', error);
+            console.error('Chyba pri vytváraní rezervácie:', error);
             alert(`Rezervácia zlyhala: ${error.message}`);
         } finally {
             confirmBookingButton.disabled = false;
@@ -272,6 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Start the App ---
+    // --- Týmto to celé spustím ---
     initialize();
 });
