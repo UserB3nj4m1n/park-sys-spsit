@@ -1,1 +1,0 @@
-Rezervácia zlyhala: Unexpected token '<', "<!DOCTYPE "... is not valid JSON

@@ -38,57 +38,6 @@ const { recognizeLicensePlate } = require('./services/ocrService');
 const { openBarrier } = require('./services/esp32Service');
 const { sendBookingConfirmation } = require('./services/emailService');
 
-// API endpoint for entry requests from the ESP32-CAM
-app.post('/api/parking/entry-request', upload.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'Žiadny obrázok nebol nahraný.' });
-  }
-  const imagePath = req.file.path;
-  console.log(`Received image, saved to: ${imagePath}`);
-  const licensePlate = await recognizeLicensePlate(imagePath);
-  if (!licensePlate) {
-    return res.status(500).json({ message: 'Nepodarilo sa rozpoznať ŠPZ.' });
-  }
-  const entryTime = new Date().toISOString();
-  const query = `INSERT INTO parking_entries (license_plate, entry_time, image_path) VALUES (?, ?, ?)`;
-  db.run(query, [licensePlate, entryTime, imagePath], async function(err) {
-    if (err) {
-      console.error('Database error:', err.message);
-      return res.status(500).json({ message: 'Nepodarilo sa uložiť záznam o parkovaní.' });
-    }
-    console.log(`New entry created with ID: ${this.lastID}`);
-    await openBarrier();
-    res.status(200).json({
-      message: 'Vstup bol úspešne spracovaný.',
-      licensePlate: licensePlate,
-      entryTime: entryTime
-    });
-  });
-});
-
-// API endpoints for parking data
-app.get('/api/parking/current', (req, res) => {
-    const query = "SELECT * FROM parking_entries WHERE exit_time IS NULL ORDER BY entry_time DESC";
-    db.all(query, [], (err, rows) => {
-        if (err) {
-            res.status(500).json({ "error": err.message });
-            return;
-        }
-        res.json({ message: "success", data: rows });
-    });
-});
-
-app.get('/api/parking/history', (req, res) => {
-    const query = "SELECT * FROM parking_entries ORDER BY entry_time DESC";
-    db.all(query, [], (err, rows) => {
-        if (err) {
-            res.status(500).json({ "error": err.message });
-            return;
-        }
-        res.json({ message: "success", data: rows });
-    });
-});
-
 // API endpoint to get all parking slots
 app.get('/api/slots', (req, res) => {
     db.all("SELECT * FROM parking_slots", [], (err, rows) => {
@@ -228,6 +177,10 @@ app.get('/api/bookings/cancel/:token', (req, res) => {
     });
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`Server is running on http://localhost:${port}`);
+    });
+}
+
+module.exports = app;
