@@ -57,37 +57,50 @@ function isValidLicensePlate(plate) {
 }
 
 // API endpoint to check reservation and open barrier
-app.post('/api/check-reservation', upload.single('image'), async (req, res) => {
-    if (!req.file) {
+app.post('/api/check-reservation', bodyParser.raw({ type: '*/*', limit: '10mb' }), async (req, res) => {
+    if (!req.body || req.body.length === 0) {
         return res.status(400).json({ message: 'Žiadny obrázok nebol nahraný.' });
     }
-    const imagePath = req.file.path;
-    console.log(`Received image for reservation check, saved to: ${imagePath}`);
-    try {
-        const licensePlate = await recognizeLicensePlate(imagePath);
-        if (!licensePlate) {
-            return res.status(400).json({ message: 'Nepodarilo sa rozpoznať ŠPZ.' });
+
+    // Write the received raw image buffer to a temporary file
+    const imagePath = path.join(uploadsDir, `esp32-cam-${Date.now()}.jpg`);
+    fs.writeFile(imagePath, req.body, async (err) => {
+        if (err) {
+            console.error('Error saving image:', err);
+            return res.status(500).json({ message: 'Chyba pri ukladaní obrázka.' });
         }
-        const today = new Date().toISOString().slice(0, 10);
-        const query = "SELECT * FROM bookings WHERE license_plate = ? AND booking_date = ?";
-        db.get(query, [licensePlate, today], async (err, row) => {
-            if (err) {
-                console.error('Database error:', err.message);
-                return res.status(500).json({ message: 'Chyba databázy pri hľadaní rezervácie.' });
+
+        console.log(`Received image for reservation check, saved to: ${imagePath}`);
+        
+        try {
+            const licensePlate = await recognizeLicensePlate(imagePath);
+            if (!licensePlate) {
+                return res.status(400).json({ message: 'Nepodarilo sa rozpoznať ŠPZ.' });
             }
-            if (row) {
-                console.log(`Reservation found for license plate: ${licensePlate}`);
-                barrierCommand = 'open'; // Set the command for the ESP32 to retrieve
-                res.status(200).json({ message: 'Rezervácia nájdená. Príkaz na otvorenie rampy bol pripravený.' });
-            } else {
-                console.log(`No reservation found for license plate: ${licensePlate}`);
-                res.status(404).json({ message: 'Žiadna rezervácia pre túto ŠPZ na dnes nebola nájdená.' });
-            }
-        });
-    } catch (error) {
-        console.error('Error during reservation check:', error);
-        res.status(500).json({ message: 'Interná chyba servera pri kontrole rezervácie.' });
-    }
+
+            const today = new Date().toISOString().slice(0, 10);
+            const query = "SELECT * FROM bookings WHERE license_plate = ? AND booking_date = ?";
+            
+            db.get(query, [licensePlate, today], (dbErr, row) => {
+                if (dbErr) {
+                    console.error('Database error:', dbErr.message);
+                    return res.status(500).json({ message: 'Chyba databázy pri hľadaní rezervácie.' });
+                }
+
+                if (row) {
+                    console.log(`Reservation found for license plate: ${licensePlate}`);
+                    barrierCommand = 'open'; // Set the command for the ESP32 to retrieve
+                    res.status(200).json({ message: 'Rezervácia nájdená. Príkaz na otvorenie rampy bol pripravený.' });
+                } else {
+                    console.log(`No reservation found for license plate: ${licensePlate}`);
+                    res.status(404).json({ message: 'Žiadna rezervácia pre túto ŠPZ na dnes nebola nájdená.' });
+                }
+            });
+        } catch (error) {
+            console.error('Error during reservation check:', error);
+            res.status(500).json({ message: 'Interná chyba servera pri kontrole rezervácie.' });
+        }
+    });
 });
 
 // API endpoint to create a booking
