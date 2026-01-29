@@ -17,7 +17,6 @@ db.serialize(() => {
         status TEXT NOT NULL DEFAULT 'available'
     )`);
 
-    // Added license_plate column to bookings
     db.run(`CREATE TABLE IF NOT EXISTS bookings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         slot_id INTEGER,
