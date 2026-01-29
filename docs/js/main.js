@@ -196,54 +196,44 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // --- Data Retrieval and Validation ---
-        const email = emailInput.value.trim();
-        const licensePlate = licensePlateInput.value.trim();
-        const cardholderName = cardholderNameInput.value.trim();
-        const cardNumber = cardNumberInput.value.trim();
-        const cardExpDate = cardExpDateInput.value.trim();
-        const cardCvv = cardCvvInput.value.trim();
+        let isFormValid = true;
 
-        if (!isValidEmail(email)) {
-            alert('Prosím, zadajte platnú emailovú adresu.');
-            return;
-        }
-        if (!isValidLicensePlate(licensePlate)) {
-            alert('Prosím, zadajte platnú ŠPZ (5-8 alfanumerických znakov alebo pomlčiek).');
-            return;
-        }
-        if (!isValidCardholderName(cardholderName)) {
-            alert('Prosím, zadajte meno držiteľa karty.');
-            return;
-        }
-        if (!isValidCardNumber(cardNumber)) {
-            alert('Prosím, zadajte platné číslo karty.');
-            return;
-        }
-        if (!isValidExpiryDate(cardExpDate)) {
-            alert('Prosím, zadajte platný dátum expirácie (MM/YY).');
-            return;
-        }
-        if (!isValidCvv(cardCvv)) {
-            alert('Prosím, zadajte platné CVV (3-4 číslice).');
-            return;
-        }
-        // --- End Data Retrieval and Validation ---
+        // --- Validation Logic ---
+        const validateField = (input, validationFn) => {
+            const value = input.value.trim();
+            // Always remove the error class first
+            input.classList.remove('border-red-500');
 
-        const startTime = `${startHourInput.value}:${startMinuteInput.value}`;
+            if (!validationFn(value)) {
+                input.classList.add('border-red-500');
+                isFormValid = false;
+            }
+        };
+        
+        validateField(emailInput, isValidEmail);
+        validateField(licensePlateInput, isValidLicensePlate);
+        validateField(cardholderNameInput, isValidCardholderName);
+        validateField(cardNumberInput, isValidCardNumber);
+        validateField(cardExpDateInput, isValidExpiryDate);
+        validateField(cardCvvInput, isValidCvv);
+
+        if (!isFormValid) {
+            return; // Stop if any field is invalid
+        }
+        // --- End Validation ---
 
         const bookingData = {
             slotId: selectedSlot.id,
-            licensePlate: licensePlate,
-            email: email,
-            cardholderName: cardholderName,
-            cardNumber: cardNumber,
-            cardExpDate: cardExpDate,
-            cardCvv: cardCvv,
+            licensePlate: licensePlateInput.value.trim(),
+            email: emailInput.value.trim(),
+            cardholderName: cardholderNameInput.value.trim(),
+            cardNumber: cardNumberInput.value.trim(),
+            cardExpDate: cardExpDateInput.value.trim(),
+            cardCvv: cardCvvInput.value.trim(),
             date: dateInput.value,
-            startTime: startTime,
+            startTime: `${startHourInput.value}:${startMinuteInput.value}`,
             endTime: (() => {
-                const [h, m] = startTime.split(':').map(Number);
+                const [h, m] = [startHourInput.value, startMinuteInput.value].map(Number);
                 const endDate = new Date();
                 endDate.setHours(h + (parseInt(durationInput.value, 10) || 0), m);
                 return endDate.toLocaleTimeString('sk-SK', { hour: '2-digit', minute: '2-digit', hour12: false });

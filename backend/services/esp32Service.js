@@ -2,7 +2,7 @@ const axios = require('axios');
 
 // ==== KONFIGURÁCIA ====
 // DÔLEŽITÉ: Nahraďte túto IP adresu skutočnou IP adresou vašej ESP32, ktorá ovláda rampu.
-const BARRIER_ESP32_IP = '192.168.1.101'; 
+const BARRIER_ESP32_IP = '5.59.199.103'; 
 // ======================
 
 async function openBarrier() {
