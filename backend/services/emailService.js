@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 async function sendBookingConfirmation(bookingDetails) {
   const { email, licensePlate, booking_date, startTime, endTime, total_price, cancellation_token, slot_name } = bookingDetails;
 
-  const cancellationUrl = `http://localhost:3000/api/bookings/cancel/${cancellation_token}`;
+  const cancellationUrl = `http://parkwise.store:3000/api/bookings/cancel/${cancellation_token}`;
 
   const mailOptions = {
     from: '"ParkWise" <noreply@parkwise.store>',
