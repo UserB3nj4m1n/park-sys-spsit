@@ -97,11 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getSlotIcon(slot) {
-        switch (slot.type) {
-            case 'EV Charging': return 'ev_station';
-            case 'Accessible': return 'accessible';
-            default: return 'directions_car';
-        }
+        return 'directions_car';
     }
 
     // --- Event Handlers & Logic ---

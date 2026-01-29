@@ -14,7 +14,6 @@ db.serialize(() => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         slot_name TEXT NOT NULL,
         level TEXT NOT NULL,
-        type TEXT NOT NULL,
         status TEXT NOT NULL DEFAULT 'available'
     )`);
 
@@ -51,9 +50,9 @@ db.serialize(() => {
         { name: 'B2', level: 'B'},
     ];
 
-    const stmt = db.prepare("INSERT INTO parking_slots (slot_name, level, type, status) VALUES (?, ?, ?, 'available')");
+    const stmt = db.prepare("INSERT INTO parking_slots (slot_name, level, status) VALUES (?, ?, 'available')");
     slots.forEach(slot => {
-        stmt.run(slot.name, slot.level, slot.type);
+        stmt.run(slot.name, slot.level);
     });
     stmt.finalize();
 });
