@@ -237,9 +237,7 @@ app.post('/api/bookings', (req, res) => {
             db.get("SELECT slot_name FROM parking_slots WHERE id = ?", [slotId], (err, slot) => {
                 if (err || !slot) {
                     console.error('Could not find slot to send email.');
-                    // Don't fail the whole request, but log the error.
                 } else {
-                     // Send confirmation email
                     sendBookingConfirmation({
                         email,
                         licensePlate,
@@ -249,6 +247,8 @@ app.post('/api/bookings', (req, res) => {
                         total_price: price,
                         cancellation_token: cancellationToken,
                         slot_name: slot.slot_name
+                    }).catch(emailError => {
+                        console.error("Failed to send confirmation email:", emailError);
                     });
                 }
             });
