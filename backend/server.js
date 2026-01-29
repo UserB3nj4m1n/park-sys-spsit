@@ -91,7 +91,7 @@ app.post('/api/check-reservation', bodyParser.raw({ type: '*/*', limit: '10mb' }
 
                 if (row) {
                     console.log(`Super, našiel som rezerváciu pre ŠPZ: ${licensePlate}`);
-                    barrierCommand = 'open'; // Pripravím príkaz na otvorenie rampy pre ESP32
+                    barrierCommand = 'open';
                     res.status(200).json({ sprava: 'Rezervácia nájdená. Príkaz na otvorenie rampy bol pripravený.' });
                 } else {
                     console.log(`Nenašiel som dnešnú rezerváciu pre ŠPZ: ${licensePlate}`);
@@ -172,7 +172,7 @@ app.post('/api/bookings', (req, res) => {
     });
 });
 
-// Endpoint na zrušenie rezervácie (toto je len na testovanie)
+// Endpoint na nutene OTVORENIE závory (len na testovanie)
 app.get('/api/debug/open-barrier', (req, res) => {
     barrierCommand = 'open';
     res.status(200).json({ sprava: 'Príkaz na otvorenie závory nastavený.' });
