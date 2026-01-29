@@ -32,6 +32,8 @@ db.serialize(() => {
         end_time TEXT,
         booking_date TEXT,
         total_price REAL,
+        status TEXT NOT NULL DEFAULT 'confirmed',
+        cancellation_token TEXT,
         FOREIGN KEY (slot_id) REFERENCES parking_slots(id)
     )`);
 
@@ -42,11 +44,11 @@ db.serialize(() => {
 
     // Insert some sample data into parking_slots
     const slots = [
-        { name: 'A1', level: 'A', type: 'car' },
-        { name: 'A2', level: 'A', type: 'car' },
-        { name: 'A3', level: 'A', type: 'motorcycle' },
-        { name: 'B1', level: 'B', type: 'car' },
-        { name: 'B2', level: 'B', type: 'car' },
+        { name: 'A1', level: 'A'},
+        { name: 'A2', level: 'A'},
+        { name: 'A3', level: 'A'},
+        { name: 'B1', level: 'B'},
+        { name: 'B2', level: 'B'},
     ];
 
     const stmt = db.prepare("INSERT INTO parking_slots (slot_name, level, type, status) VALUES (?, ?, ?, 'available')");

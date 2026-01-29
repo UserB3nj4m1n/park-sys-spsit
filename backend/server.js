@@ -204,18 +204,19 @@ app.post('/api/bookings', (req, res) => {
     if (!emailRegex.test(email)) {
         return res.status(400).json({ message: 'Neplatný formát emailu.' });
     }
-    // Note: More robust validation for credit card details would be needed in a real application.
     // --- End Validation ---
+
+    const cancellationToken = crypto.randomBytes(16).toString('hex');
 
     const bookingQuery = `
         INSERT INTO bookings (
             slot_id, license_plate, email, cardholder_name, card_number, card_exp_date, card_cvv, 
-            booking_date, start_time, end_time, total_price
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            booking_date, start_time, end_time, total_price, cancellation_token
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const params = [
         slotId, licensePlate, email, cardholderName, cardNumber, cardExpDate, cardCvv, 
-        date, startTime, endTime, price
+        date, startTime, endTime, price, cancellationToken
     ];
 
     db.run(bookingQuery, params, function(err) {
@@ -224,17 +225,71 @@ app.post('/api/bookings', (req, res) => {
             return res.status(500).json({ message: 'Interná chyba servera.' });
         }
         
+        const bookingId = this.lastID;
         const updateSlotQuery = "UPDATE parking_slots SET status = 'reserved' WHERE id = ?";
         db.run(updateSlotQuery, [slotId], function(err) {
             if (err) {
-                // Ideally, you'd handle this failure by rolling back the booking
                 console.error('Error updating slot status:', err);
                 return res.status(500).json({ message: 'Rezervácia bola vytvorená, ale nepodarilo sa aktualizovať stav parkovacieho miesta.' });
             }
+
+            // Get slot name to include in email
+            db.get("SELECT slot_name FROM parking_slots WHERE id = ?", [slotId], (err, slot) => {
+                if (err || !slot) {
+                    console.error('Could not find slot to send email.');
+                    // Don't fail the whole request, but log the error.
+                } else {
+                     // Send confirmation email
+                    sendBookingConfirmation({
+                        email,
+                        licensePlate,
+                        booking_date: date,
+                        startTime,
+                        endTime,
+                        total_price: price,
+                        cancellation_token: cancellationToken,
+                        slot_name: slot.slot_name
+                    });
+                }
+            });
+
             res.status(201).json({ message: 'Rezervácia bola úspešne vytvorená.' });
         });
     });
 });
+
+app.get('/api/bookings/cancel/:token', (req, res) => {
+    const { token } = req.params;
+
+    db.get("SELECT * FROM bookings WHERE cancellation_token = ? AND status = 'confirmed'", [token], (err, booking) => {
+        if (err) {
+            return res.status(500).send('<h1>Error</h1><p>A database error occurred.</p>');
+        }
+        if (!booking) {
+            return res.status(404).send('<h1>Not Found</h1><p>This booking was not found or has already been cancelled.</p>');
+        }
+
+        db.serialize(() => {
+            db.run("UPDATE bookings SET status = 'cancelled' WHERE id = ?", [booking.id], function(err) {
+                if (err) {
+                    return res.status(500).send('<h1>Error</h1><p>Failed to update booking status.</p>');
+                }
+
+                db.run("UPDATE parking_slots SET status = 'available' WHERE id = ?", [booking.slot_id], function(err) {
+                    if (err) {
+                        // This is problematic, the booking is cancelled but the slot is not freed.
+                        // For this project, we'll just log it. A real app would need a transaction.
+                        console.error(`Failed to free slot ${booking.slot_id} for cancelled booking ${booking.id}`);
+                        return res.status(500).send('<h1>Error</h1><p>Booking was cancelled, but the parking slot could not be freed. Please contact support.</p>');
+                    }
+                    
+                    res.send('<h1>Success</h1><p>Your booking has been successfully cancelled.</p>');
+                });
+            });
+        });
+    });
+});
+
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
