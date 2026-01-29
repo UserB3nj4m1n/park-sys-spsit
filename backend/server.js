@@ -150,8 +150,15 @@ app.post('/api/bookings', (req, res) => {
                     console.error('Nepodarilo sa nájsť miesto, ku ktorému poslať email.');
                 } else {
                     sendBookingConfirmation({
-                        email, licensePlate, booking_date: date, startTime, endTime,
-                        total_price: price, cancellation_token: cancellationToken, slot_name: slot.slot_name
+                        email, 
+                        licensePlate, 
+                        booking_date: date, 
+                        startTime, 
+                        endTime,
+                        total_price: price, 
+                        cancellation_token: cancellationToken, 
+                        slot_name: slot.slot_name,
+                        cardholderName
                     }).catch(emailError => {
                         console.error("Nepodarilo sa odoslať potvrdzovací email:", emailError);
                     });
