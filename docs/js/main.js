@@ -57,6 +57,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Vykreslenie dát na stránku ---
+    function translateStatus(status) {
+        switch (status) {
+            case 'available':
+                return 'Voľné';
+            case 'reserved':
+                return 'Rezervované';
+            default:
+                return status; // Vráti pôvodný stav, ak nie je známy
+        }
+    }
+
     function renderSlots() {
         if (!parkingMap) return;
         parkingMap.innerHTML = ''; // Najprv všetko vymažem, aby som nemal duplikáty
@@ -64,6 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
         allSlots.forEach(slot => {
             const isAvailable = slot.status === 'available';
             const isSelected = selectedSlot && selectedSlot.id === slot.id;
+
+            const translatedStatus = translateStatus(slot.status);
 
             const slotCard = document.createElement('div');
             slotCard.className = `p-4 rounded-xl border-2 flex flex-col justify-between transition-all duration-300 ${getSlotClasses(slot, isSelected)}`;
@@ -73,9 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="text-2xl font-bold text-black dark:text-white">${slot.slot_name}</span>
                         <span class="material-symbols-outlined text-3xl text-black dark:text-white">${getSlotIcon(slot)}</span>
                     </div>
-                    <p class="text-sm font-medium mt-1 text-black dark:text-white">${slot.status.charAt(0).toUpperCase() + slot.status.slice(1)}</p>
+                    <p class="text-sm font-medium mt-1 text-black dark:text-white">${translatedStatus}</p>
                 </div>
-                <p class="text-xs font-semibold mt-4 text-black dark:text-white">€${pricePerHour.toFixed(2)} / hodina</p>
+                <p class="text-xs font-semibold mt-4 text-black dark:text-white">${pricePerHour.toFixed(2)} € / hodina</p>
             `;
 
             if (isAvailable) {
@@ -147,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const duration = parseInt(durationInput.value, 10) || 0;
         const price = duration * pricePerHour;
-        summaryPriceEl.textContent = `€${price.toFixed(2)}`;
+        summaryPriceEl.textContent = `${price.toFixed(2)} €`;
     }
 
     // --- Funkcie na kontrolu správnosti vstupov ---
