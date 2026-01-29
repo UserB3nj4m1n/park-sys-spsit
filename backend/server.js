@@ -35,8 +35,9 @@ app.use('/uploads', express.static('uploads'));
 
 const db = require('./database.js');
 const { recognizeLicensePlate } = require('./services/ocrService');
-const { openBarrier } = require('./services/esp32Service');
 const { sendBookingConfirmation } = require('./services/emailService');
+
+let barrierCommand = 'wait'; // This will hold the command for the barrier ESP32
 
 // API endpoint to get all parking slots
 app.get('/api/slots', (req, res) => {
@@ -76,8 +77,8 @@ app.post('/api/check-reservation', upload.single('image'), async (req, res) => {
             }
             if (row) {
                 console.log(`Reservation found for license plate: ${licensePlate}`);
-                await openBarrier();
-                res.status(200).json({ message: 'Rezervácia nájdená. Rampa sa otvára.' });
+                barrierCommand = 'open'; // Set the command for the ESP32 to retrieve
+                res.status(200).json({ message: 'Rezervácia nájdená. Príkaz na otvorenie rampy bol pripravený.' });
             } else {
                 console.log(`No reservation found for license plate: ${licensePlate}`);
                 res.status(404).json({ message: 'Žiadna rezervácia pre túto ŠPZ na dnes nebola nájdená.' });
@@ -150,6 +151,14 @@ app.post('/api/bookings', (req, res) => {
 });
 
 // API endpoint for cancellation
+app.get('/api/barrier/command', (req, res) => {
+    res.send(barrierCommand);
+    // Reset the command after it has been sent
+    if (barrierCommand === 'open') {
+        barrierCommand = 'wait';
+    }
+});
+
 app.get('/api/bookings/cancel/:token', (req, res) => {
     const { token } = req.params;
     db.get("SELECT * FROM bookings WHERE cancellation_token = ? AND status = 'confirmed'", [token], (err, booking) => {
