@@ -164,6 +164,11 @@ app.post('/api/bookings', (req, res) => {
 });
 
 // API endpoint for cancellation
+app.get('/api/debug/open-barrier', (req, res) => {
+    barrierCommand = 'open';
+    res.status(200).json({ message: 'Príkaz na otvorenie závory nastavený.' });
+});
+
 app.get('/api/barrier/command', (req, res) => {
     res.send(barrierCommand);
     // Reset the command after it has been sent
