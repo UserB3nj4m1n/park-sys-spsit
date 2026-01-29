@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cardCvvInput = document.getElementById('card-cvv');
     const dateInput = document.getElementById('date');
     const startHourInput = document.getElementById('start-hour');
-    const startMinuteInput = document.getElementById('start-minute');
+    const startMinuteInput = document('start-minute');
     const durationInput = document.getElementById('duration');
     const summaryPriceEl = document.getElementById('summary-price');
     const confirmBookingButton = document.getElementById('confirm-booking-button');
@@ -120,6 +120,38 @@ document.addEventListener('DOMContentLoaded', () => {
         startMinuteInput?.addEventListener('change', updateSummary);
         durationInput?.addEventListener('input', updateSummary);
         confirmBookingButton?.addEventListener('click', handleConfirmBooking);
+
+        // Pre automatické formátovanie dátumu expirácie (MM/YY)
+        cardExpDateInput?.addEventListener('input', (event) => {
+            let input = event.target;
+            let value = input.value.replace(/\D/g, ''); // Odstráni všetky nečíselné znaky
+            let formattedValue = '';
+
+            if (value.length > 0) {
+                formattedValue = value.substring(0, 2); // Prvé dve číslice pre mesiac
+                if (value.length >= 3) {
+                    formattedValue += '/' + value.substring(2, 4); // Ďalšie dve číslice pre rok
+                }
+            }
+            input.value = formattedValue;
+        });
+
+        // Pre automatické formátovanie čísla karty (XXXX XXXX XXXX XXXX)
+        cardNumberInput?.addEventListener('input', (event) => {
+            let input = event.target;
+            let value = input.value.replace(/\D/g, ''); // Odstráni všetky nečíselné znaky
+            let formattedValue = '';
+
+            // Rozdelí číslo karty do skupín po 4 číslice s medzerou
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += ' ';
+                }
+                formattedValue += value[i];
+            }
+            // Obmedzenie na max. dĺžku (napr. 19 číslic + 3 medzery = 22 znakov)
+            input.value = formattedValue.substring(0, 19); 
+        });
     }
 
     function setInitialDateTime() {
