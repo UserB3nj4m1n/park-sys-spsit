@@ -177,9 +177,22 @@ app.post('/api/check-reservation', upload.single('image'), async (req, res) => {
 
 // API endpoint to create a booking (anonymous)
 app.post('/api/bookings', (req, res) => {
-    const { slotId, licensePlate, date, startTime, endTime, price } = req.body;
+    const { 
+        slotId, 
+        licensePlate, 
+        email,
+        cardholderName,
+        cardNumber,
+        cardExpDate,
+        cardCvv,
+        date, 
+        startTime, 
+        endTime, 
+        price 
+    } = req.body;
 
-    if (!slotId || !licensePlate || !date || !startTime || !endTime || !price) {
+    // --- Validation ---
+    if (!slotId || !licensePlate || !email || !cardholderName || !cardNumber || !cardExpDate || !cardCvv || !date || !startTime || !endTime || !price) {
         return res.status(400).json({ message: 'Všetky polia pre rezerváciu sú povinné.' });
     }
 
@@ -187,8 +200,25 @@ app.post('/api/bookings', (req, res) => {
         return res.status(400).json({ message: 'Neplatný formát ŠPZ.' });
     }
 
-    const bookingQuery = 'INSERT INTO bookings (slot_id, license_plate, booking_date, start_time, end_time, total_price) VALUES (?, ?, ?, ?, ?, ?)';
-    db.run(bookingQuery, [slotId, licensePlate, date, startTime, endTime, price], function(err) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ message: 'Neplatný formát emailu.' });
+    }
+    // Note: More robust validation for credit card details would be needed in a real application.
+    // --- End Validation ---
+
+    const bookingQuery = `
+        INSERT INTO bookings (
+            slot_id, license_plate, email, cardholder_name, card_number, card_exp_date, card_cvv, 
+            booking_date, start_time, end_time, total_price
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const params = [
+        slotId, licensePlate, email, cardholderName, cardNumber, cardExpDate, cardCvv, 
+        date, startTime, endTime, price
+    ];
+
+    db.run(bookingQuery, params, function(err) {
         if (err) {
             console.error('Error creating booking:', err);
             return res.status(500).json({ message: 'Interná chyba servera.' });
@@ -197,7 +227,7 @@ app.post('/api/bookings', (req, res) => {
         const updateSlotQuery = "UPDATE parking_slots SET status = 'reserved' WHERE id = ?";
         db.run(updateSlotQuery, [slotId], function(err) {
             if (err) {
-                // Ideally, you'd handle this failure, e.g., by rolling back the booking
+                // Ideally, you'd handle this failure by rolling back the booking
                 console.error('Error updating slot status:', err);
                 return res.status(500).json({ message: 'Rezervácia bola vytvorená, ale nepodarilo sa aktualizovať stav parkovacieho miesta.' });
             }

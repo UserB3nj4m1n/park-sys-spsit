@@ -23,6 +23,7 @@ database.db
 
 # Gemini related
 .gemini/
+GEMINI.md
 
 # My own files
 seed.js

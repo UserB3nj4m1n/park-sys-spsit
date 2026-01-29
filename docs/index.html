@@ -97,13 +97,44 @@
 
                                 <!-- Form Section: License Plate -->
                                 <div class="border-t border-slate-200 dark:border-slate-700 pt-5">
-                                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">ŠPZ (evidenčné číslo vozidla)</h3>
-                                    <div>
-                                        <label for="license-plate" class="block text-sm font-medium text-slate-700 dark:text-slate-300">ŠPZ</label>
-                                        <input type="text" id="license-plate" name="license-plate" class="mt-1 form-input block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500" placeholder="KE-123AB">
+                                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Kontaktné informácie a ŠPZ</h3>
+                                    <div class="space-y-4">
+                                        <div>
+                                            <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Emailová Adresa</label>
+                                            <input type="email" id="email" name="email" class="mt-1 form-input block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500" placeholder="you@example.com" required>
+                                        </div>
+                                        <div>
+                                            <label for="license-plate" class="block text-sm font-medium text-slate-700 dark:text-slate-300">ŠPZ (evidenčné číslo vozidla)</label>
+                                            <input type="text" id="license-plate" name="license-plate" class="mt-1 form-input block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500" placeholder="KE-123AB" required>
+                                        </div>
                                     </div>
                                 </div>
                                 
+                                <!-- Form Section: Payment Details -->
+                                <div class="border-t border-slate-200 dark:border-slate-700 pt-5">
+                                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Platobné Údaje</h3>
+                                    <div class="space-y-4">
+                                        <div>
+                                            <label for="cardholder-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Meno držiteľa karty</label>
+                                            <input type="text" id="cardholder-name" name="cardholder-name" class="mt-1 form-input block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500" placeholder="Meno Priezvisko" required>
+                                        </div>
+                                        <div>
+                                            <label for="card-number" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Číslo karty</label>
+                                            <input type="text" id="card-number" name="card-number" class="mt-1 form-input block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500" placeholder="XXXX XXXX XXXX XXXX" required>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label for="card-exp-date" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Dátum expirácie</label>
+                                                <input type="text" id="card-exp-date" name="card-exp-date" class="mt-1 form-input block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500" placeholder="MM/YY" required>
+                                            </div>
+                                            <div>
+                                                <label for="card-cvv" class="block text-sm font-medium text-slate-700 dark:text-slate-300">CVV</label>
+                                                <input type="text" id="card-cvv" name="card-cvv" class="mt-1 form-input block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500" placeholder="XXX" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- Form Section: Date & Time -->
                                 <div class="border-t border-slate-200 dark:border-slate-700 pt-5">
                                     <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Dátum & Čas</h3>

@@ -1,37 +1,3 @@
-// Overriding default tailwind colors for a more modern palette
-tailwind.config = {
-    darkMode: "class",
-    theme: {
-        extend: {
-            colors: {
-                // Using slate for backgrounds and a vibrant indigo for the primary accent
-                primary: {
-                    DEFAULT: 'rgb(79 70 229)', // indigo-600
-                    '50': 'rgb(238 242 255)',
-                    '100': 'rgb(224 231 255)',
-                    '200': 'rgb(199 210 254)',
-                    '300': 'rgb(165 180 252)',
-                    '400': 'rgb(129 140 248)',
-                    '500': 'rgb(99 102 241)',
-                    '600': 'rgb(79 70 229)',
-                    '700': 'rgb(67 56 202)',
-                    '800': 'rgb(55 48 163)',
-                    '900': 'rgb(49 46 129)',
-                    '950': 'rgb(30 27 75)',
-                },
-                background: {
-                    light: 'rgb(241 245 249)', // slate-100
-                    dark: 'rgb(15 23 42)'     // slate-900
-                },
-            },
-            fontFamily: {
-                "display": ["Manrope", "sans-serif"]
-            },
-            borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
-        },
-    },
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     // --- DOM Elements ---
     const parkingMap = document.getElementById('parking-map');
@@ -41,7 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Form Elements
     const summarySlotEl = document.getElementById('summary-slot');
+    const emailInput = document.getElementById('email');
     const licensePlateInput = document.getElementById('license-plate');
+    const cardholderNameInput = document.getElementById('cardholder-name');
+    const cardNumberInput = document.getElementById('card-number');
+    const cardExpDateInput = document.getElementById('card-exp-date');
+    const cardCvvInput = document.getElementById('card-cvv');
     const dateInput = document.getElementById('date');
     const startTimeInput = document.getElementById('start-time');
     const durationInput = document.getElementById('duration');
@@ -165,12 +136,45 @@ document.addEventListener('DOMContentLoaded', () => {
         summaryPriceEl.textContent = `€${price.toFixed(2)}`;
     }
 
-    // Basic license plate validation
+    // --- Validation Functions ---
+    function isValidEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+
     function isValidLicensePlate(plate) {
-        // Example: Allows alphanumeric characters and hyphens, 5 to 8 characters long
         const regex = /^[a-zA-Z0-9-]{5,8}$/;
         return regex.test(plate);
     }
+
+    function isValidCardholderName(name) {
+        return name.trim().length > 2;
+    }
+
+    function isValidCardNumber(number) {
+        const regex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
+        // A simple Luhn algorithm check would be better for a real app.
+        return regex.test(number.replace(/\s/g, ''));
+    }
+
+    function isValidExpiryDate(date) {
+        const regex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+        if (!regex.test(date)) return false;
+        
+        const [month, year] = date.split('/');
+        const expiry = new Date(`20${year}`, month - 1);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Compare dates only
+        
+        return expiry >= today;
+    }
+
+    function isValidCvv(cvv) {
+        const regex = /^[0-9]{3,4}$/;
+        return regex.test(cvv);
+    }
+    // --- End Validation Functions ---
+
 
     async function handleConfirmBooking() {
         if (!selectedSlot) {
@@ -178,19 +182,49 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // --- Data Retrieval and Validation ---
+        const email = emailInput.value.trim();
         const licensePlate = licensePlateInput.value.trim();
-        if (!licensePlate) {
-            alert('Prosím, zadajte svoju ŠPZ.');
+        const cardholderName = cardholderNameInput.value.trim();
+        const cardNumber = cardNumberInput.value.trim();
+        const cardExpDate = cardExpDateInput.value.trim();
+        const cardCvv = cardCvvInput.value.trim();
+
+        if (!isValidEmail(email)) {
+            alert('Prosím, zadajte platnú emailovú adresu.');
             return;
         }
         if (!isValidLicensePlate(licensePlate)) {
             alert('Prosím, zadajte platnú ŠPZ (5-8 alfanumerických znakov alebo pomlčiek).');
             return;
         }
+        if (!isValidCardholderName(cardholderName)) {
+            alert('Prosím, zadajte meno držiteľa karty.');
+            return;
+        }
+        if (!isValidCardNumber(cardNumber)) {
+            alert('Prosím, zadajte platné číslo karty.');
+            return;
+        }
+        if (!isValidExpiryDate(cardExpDate)) {
+            alert('Prosím, zadajte platný dátum expirácie (MM/YY).');
+            return;
+        }
+        if (!isValidCvv(cardCvv)) {
+            alert('Prosím, zadajte platné CVV (3-4 číslice).');
+            return;
+        }
+        // --- End Data Retrieval and Validation ---
+
 
         const bookingData = {
             slotId: selectedSlot.id,
             licensePlate: licensePlate,
+            email: email,
+            cardholderName: cardholderName,
+            cardNumber: cardNumber,
+            cardExpDate: cardExpDate,
+            cardCvv: cardCvv,
             date: dateInput.value,
             startTime: startTimeInput.value,
             endTime: (() => {
