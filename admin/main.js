@@ -12,21 +12,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Pomocné Funkcie pre Preklad ---
     function translateBookingStatus(status) {
-        switch (status) {
-            case 'confirmed': return 'potvrdené';
-            case 'cancelled': return 'zrušené';
-            default: return status;
-        }
+        if (status === 'confirmed') return 'potvrdené';
+        if (status === 'cancelled') return 'zrušené';
+        return status;
     }
 
     function translateSlotStatus(status) {
-        switch (status) {
-            case 'available': return 'voľné';
-            case 'reserved': return 'obsadené';
-            default: return status;
-        }
+        if (status === 'available') return 'voľné';
+        if (status === 'reserved') return 'obsadené';
+        return status;
     }
-
 
     // --- API Wrapper ---
     const api = {
@@ -56,10 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('hidden');
         modal.classList.add('flex');
     }
+
     function closeModal() {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
     }
+
     async function handleSave() {
         try {
             await api.put(`/admin/bookings/${editBookingIdInput.value}`, {
@@ -68,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             closeModal();
             loadData();
-            alert('Rezervácia bola úspešne aktualizovaná!');
         } catch (error) {
             alert(`Chyba pri ukladaní: ${error.message}`);
         }
@@ -80,27 +76,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const bookings = await api.get('/admin/bookings');
             let table = `
                 <table class="min-w-full leading-normal">
-                    <thead><tr>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left text-xs font-semibold text-gray-600 dark:text-slate-300 uppercase tracking-wider">ID</th>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left text-xs font-semibold text-gray-600 dark:text-slate-300 uppercase tracking-wider">EČV</th>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left text-xs font-semibold text-gray-600 dark:text-slate-300 uppercase tracking-wider">Email</th>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left text-xs font-semibold text-gray-600 dark:text-slate-300 uppercase tracking-wider">Stav</th>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left text-xs font-semibold text-gray-600 dark:text-slate-300 uppercase tracking-wider">Akcie</th>
+                    <thead><tr class="text-xs font-semibold text-gray-600 dark:text-slate-300 uppercase tracking-wider">
+                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left">ID</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left">EČV</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left">Email</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left">Dátum a Čas</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left">Stav</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left">Akcie</th>
                     </tr></thead>
                     <tbody class="text-gray-700 dark:text-slate-300">
             `;
             if (bookings.length > 0) {
                 bookings.forEach(b => {
-                    const translatedStatus = translateBookingStatus(b.status);
                     const statusClass = b.status === 'confirmed' ? 'text-green-900 bg-green-200' : 'text-red-900 bg-red-200';
                     table += `
-                        <tr data-id="${b.id}" data-booking='${JSON.stringify(b)}'>
+                        <tr data-booking='${JSON.stringify(b)}'>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${b.id}</td>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${b.license_plate}</td>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${b.email}</td>
-                            <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">
-                                <span class="relative inline-block px-3 py-1 font-semibold ${statusClass} leading-tight rounded-full">${translatedStatus}</span>
-                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${b.booking_date} <br> ${b.start_time} - ${b.end_time}</td>
+                            <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"><span class="relative inline-block px-3 py-1 font-semibold ${statusClass} leading-tight rounded-full">${translateBookingStatus(b.status)}</span></td>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">
                                 <button class="text-blue-600 hover:text-blue-900" data-action="edit">Upraviť</button>
                                 <button class="text-indigo-600 hover:text-indigo-900 ml-4" data-action="toggle">Zmeniť stav</button>
@@ -110,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                 });
             } else {
-                table += `<tr><td colspan="5" class="text-center p-4">Žiadne rezervácie.</td></tr>`;
+                table += `<tr><td colspan="6" class="text-center p-4">Žiadne rezervácie.</td></tr>`;
             }
             bookingsContainer.innerHTML = table + `</tbody></table>`;
         } catch (e) {
@@ -132,13 +127,12 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             if (slots.length > 0) {
                 slots.forEach(s => {
-                    const translatedStatus = translateSlotStatus(s.status);
                     const statusClass = s.status === 'available' ? 'text-green-900 bg-green-200' : 'text-yellow-900 bg-yellow-200';
                     table += `
                         <tr>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${s.id}</td>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${s.slot_name}</td>
-                            <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"><span class="relative inline-block px-3 py-1 font-semibold ${statusClass} leading-tight rounded-full">${translatedStatus}</span></td>
+                            <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"><span class="relative inline-block px-3 py-1 font-semibold ${statusClass} leading-tight rounded-full">${translateSlotStatus(s.status)}</span></td>
                         </tr>
                     `;
                 });
@@ -151,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Spracovanie Akcií pomocou Event Delegation ---
+    // --- Spracovanie Akcií ---
     bookingsContainer.addEventListener('click', async (e) => {
         if (e.target.tagName !== 'BUTTON') return;
         const button = e.target;
@@ -183,12 +177,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Hlavná inicializácia ---
+    // --- Inicializácia ---
     async function loadData() {
         await renderBookings();
         await renderSlots();
     }
     cancelButton.addEventListener('click', closeModal);
     saveButton.addEventListener('click', handleSave);
+    
     loadData();
 });
