@@ -128,10 +128,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Inicializácia a event listenery
-    cancelButton.addEventListener('click', closeModal);
-    saveButton.addEventListener('click', saveBookingChanges);
-    
+    async function fetchSlots() {
+        try {
+            const response = await fetch('/admin/slots');
+            const slots = await response.json();
+
+            slotsTableBody.innerHTML = ''; // Vyčistí staré dáta
+
+            if (slots.length === 0) {
+                 slotsTableBody.innerHTML = '<tr><td colspan="3" class="text-center py-4">Nenašli sa žiadne parkovacie miesta.</td></tr>';
+                 return;
+            }
+
+            slots.forEach(slot => {
+                const row = `
+                    <tr>
+                        <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${slot.id}</td>
+                        <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${slot.slot_name}</td>
+                        <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">
+                             <span class="relative inline-block px-3 py-1 font-semibold ${slot.status === 'available' ? 'text-green-900' : 'text-yellow-900'} leading-tight">
+                                <span aria-hidden="true" class="absolute inset-0 ${slot.status === 'available' ? 'bg-green-200' : 'bg-yellow-200'} opacity-50 rounded-full"></span>
+                                <span class="relative">${slot.status}</span>
+                            </span>
+                        </td>
+                    </tr>
+                `;
+                slotsTableBody.innerHTML += row;
+            });
+        } catch (error) {
+            console.error('Chyba pri načítavaní parkovacích miest:', error);
+            slotsTableBody.innerHTML = '<tr><td colspan="3" class="text-center py-4">Nepodarilo sa načítať dáta.</td></tr>';
+        }
+    }
+
+
+    // Event listener pre celú tabuľku rezervácií
+    bookingsTableBody.addEventListener('click', (event) => {
+        const target = event.target;
+        const action = target.dataset.action;
+        const id = target.dataset.id;
+
+        if (action === 'edit') {
+            const status = target.dataset.status;
+            updateBookingStatus(id, status);
+        } else if (action === 'delete') {
+            deleteBooking(id);
+        }
+    });
+
+    // Event listener pre celú tabuľku rezervácií
+    // Teraz sa priama akcia vykonáva cez event listenery priradené k tlačidlám priamo v ich riadku
+    // bookingsTableBody.addEventListener('click', (event) => { ... });
+
+    // Načítaj dáta pri prvom spustení
     fetchBookings();
-    //fetchSlots(); // Dočasne pozastavené, keďže sloty nemajú akcie
+    fetchSlots(); // ODkomentované
 });
