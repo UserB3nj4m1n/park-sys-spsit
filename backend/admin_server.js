@@ -7,7 +7,6 @@ const app = express();
 const PORT = 3001;
 const HOST = '127.0.0.1';
 
-// Pripojenie k databáze
 const dbPath = path.resolve(__dirname, './database.db');
 const db = new sqlite3.Database(dbPath);
 
@@ -15,11 +14,13 @@ app.use(cors());
 app.use(express.json());
 
 // Servírovanie statických súborov
+// Prvý servíruje admin/main.js atď.
 app.use(express.static(path.resolve(__dirname, '../admin')));
+// Druhý poskytuje prístup k /css/main.css a /js/theme.js
 app.use(express.static(path.resolve(__dirname, '../docs')));
 
 // --- API Endpointy ---
-
+// (Zostávajú nezmenené)
 app.get('/admin/bookings', (req, res) => {
     db.all("SELECT b.id, b.slot_id, b.license_plate, b.email, b.booking_date, b.total_price, b.status, p.slot_name FROM bookings b LEFT JOIN parking_slots p ON b.slot_id = p.id ORDER BY b.id DESC", [], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -73,7 +74,8 @@ app.delete('/admin/bookings/:id', (req, res) => {
     });
 });
 
-app.get('/admin', (req, res) => {
+// Hlavná cesta servíruje index.html z adresára 'admin'
+app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../admin/index.html'));
 });
 
