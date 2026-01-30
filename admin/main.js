@@ -10,6 +10,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveButton = document.getElementById('save-edit');
     const cancelButton = document.getElementById('cancel-edit');
 
+    // --- Pomocné Funkcie pre Preklad ---
+    function translateBookingStatus(status) {
+        switch (status) {
+            case 'confirmed': return 'potvrdené';
+            case 'cancelled': return 'zrušené';
+            default: return status;
+        }
+    }
+
+    function translateSlotStatus(status) {
+        switch (status) {
+            case 'available': return 'voľné';
+            case 'reserved': return 'obsadené';
+            default: return status;
+        }
+    }
+
+
     // --- API Wrapper ---
     const api = {
         async request(url, options = {}) {
@@ -30,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     api.delete = (url) => api.request(url, { method: 'DELETE' });
     api.get = (url) => api.request(url);
 
-    // --- Funkcie pre Modálne Okno ---
+    // --- Logika Modálneho Okna ---
     function openModal(booking) {
         editBookingIdInput.value = booking.id;
         editEmailInput.value = booking.email;
@@ -50,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             closeModal();
             loadData();
+            alert('Rezervácia bola úspešne aktualizovaná!');
         } catch (error) {
             alert(`Chyba pri ukladaní: ${error.message}`);
         }
@@ -59,26 +78,29 @@ document.addEventListener('DOMContentLoaded', () => {
     async function renderBookings() {
         try {
             const bookings = await api.get('/admin/bookings');
-            let tableHtml = `
+            let table = `
                 <table class="min-w-full leading-normal">
-                    <thead><tr class="text-xs font-semibold text-gray-600 dark:text-slate-300 uppercase tracking-wider">
-                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left">ID</th>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left">EČV</th>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left">Email</th>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left">Stav</th>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left">Akcie</th>
+                    <thead><tr>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left text-xs font-semibold text-gray-600 dark:text-slate-300 uppercase tracking-wider">ID</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left text-xs font-semibold text-gray-600 dark:text-slate-300 uppercase tracking-wider">EČV</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left text-xs font-semibold text-gray-600 dark:text-slate-300 uppercase tracking-wider">Email</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left text-xs font-semibold text-gray-600 dark:text-slate-300 uppercase tracking-wider">Stav</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left text-xs font-semibold text-gray-600 dark:text-slate-300 uppercase tracking-wider">Akcie</th>
                     </tr></thead>
                     <tbody class="text-gray-700 dark:text-slate-300">
             `;
             if (bookings.length > 0) {
                 bookings.forEach(b => {
+                    const translatedStatus = translateBookingStatus(b.status);
                     const statusClass = b.status === 'confirmed' ? 'text-green-900 bg-green-200' : 'text-red-900 bg-red-200';
-                    tableHtml += `
-                        <tr data-booking='${JSON.stringify(b)}'>
+                    table += `
+                        <tr data-id="${b.id}" data-booking='${JSON.stringify(b)}'>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${b.id}</td>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${b.license_plate}</td>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${b.email}</td>
-                            <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"><span class="relative inline-block px-3 py-1 font-semibold ${statusClass} leading-tight rounded-full">${b.status}</span></td>
+                            <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">
+                                <span class="relative inline-block px-3 py-1 font-semibold ${statusClass} leading-tight rounded-full">${translatedStatus}</span>
+                            </td>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">
                                 <button class="text-blue-600 hover:text-blue-900" data-action="edit">Upraviť</button>
                                 <button class="text-indigo-600 hover:text-indigo-900 ml-4" data-action="toggle">Zmeniť stav</button>
@@ -88,17 +110,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                 });
             } else {
-                tableHtml += `<tr><td colspan="5" class="text-center p-4">Žiadne rezervácie.</td></tr>`;
+                table += `<tr><td colspan="5" class="text-center p-4">Žiadne rezervácie.</td></tr>`;
             }
-            bookingsContainer.innerHTML = tableHtml + `</tbody></table>`;
+            bookingsContainer.innerHTML = table + `</tbody></table>`;
         } catch (e) {
             bookingsContainer.innerHTML = `<p class="p-4 text-red-500">Chyba pri načítaní rezervácií: ${e.message}</p>`;
         }
     }
+
     async function renderSlots() {
         try {
             const slots = await api.get('/admin/slots');
-            let tableHtml = `
+            let table = `
                 <table class="min-w-full leading-normal">
                     <thead><tr>
                         <th class="px-5 py-3 border-b-2 border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800 text-left text-xs font-semibold text-gray-600 dark:text-slate-300 uppercase tracking-wider">ID</th>
@@ -109,19 +132,20 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             if (slots.length > 0) {
                 slots.forEach(s => {
+                    const translatedStatus = translateSlotStatus(s.status);
                     const statusClass = s.status === 'available' ? 'text-green-900 bg-green-200' : 'text-yellow-900 bg-yellow-200';
-                    tableHtml += `
+                    table += `
                         <tr>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${s.id}</td>
                             <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${s.slot_name}</td>
-                            <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"><span class="relative inline-block px-3 py-1 font-semibold ${statusClass} leading-tight rounded-full">${s.status}</span></td>
+                            <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"><span class="relative inline-block px-3 py-1 font-semibold ${statusClass} leading-tight rounded-full">${translatedStatus}</span></td>
                         </tr>
                     `;
                 });
             } else {
-                tableHtml += `<tr><td colspan="3" class="text-center p-4">Žiadne parkovacie miesta.</td></tr>`;
+                table += `<tr><td colspan="3" class="text-center p-4">Žiadne parkovacie miesta.</td></tr>`;
             }
-            slotsContainer.innerHTML = tableHtml + `</tbody></table>`;
+            slotsContainer.innerHTML = table + `</tbody></table>`;
         } catch (e) {
             slotsContainer.innerHTML = `<p class="p-4 text-red-500">Chyba pri načítaní miest: ${e.message}</p>`;
         }
@@ -139,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             openModal(booking);
         } else if (action === 'toggle') {
             const newStatus = booking.status === 'confirmed' ? 'cancelled' : 'confirmed';
-            if (confirm(`Naozaj chcete zmeniť stav rezervácie #${booking.id} na "${newStatus}"?`)) {
+            if (confirm(`Naozaj chcete zmeniť stav rezervácie #${booking.id} na "${translateBookingStatus(newStatus)}"?`)) {
                 try {
                     await api.put(`/admin/bookings/${booking.id}/status`, { newStatus });
                     loadData();
@@ -159,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Inicializácia ---
+    // --- Hlavná inicializácia ---
     async function loadData() {
         await renderBookings();
         await renderSlots();
