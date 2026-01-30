@@ -20,8 +20,9 @@ const db = new sqlite3.Database(dbPath, (err) => {
 app.use(cors());
 app.use(express.json());
 
-// Servírovanie statických súborov z adresára 'admin'
-app.use(express.static(path.resolve(__dirname, '../admin')));
+// Servírovanie statických súborov
+app.use(express.static(path.resolve(__dirname, '../admin'))); // Pre admin/index.html, admin/main.js
+app.use(express.static(path.resolve(__dirname, '../docs')));  // Pre css/main.css, js/theme.js
 
 // --- API Endpointy pre Admin Panel ---
 
