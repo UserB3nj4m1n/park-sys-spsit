@@ -27,7 +27,7 @@ app.use(express.static(path.resolve(__dirname, '../admin')));
 
 // Endpoint na získanie všetkých rezervácií
 app.get('/admin/bookings', (req, res) => {
-    db.all("SELECT b.*, p.slot_name FROM bookings b JOIN parking_slots p ON b.slot_id = p.id ORDER BY b.id DESC", [], (err, rows) => {
+    db.all("SELECT b.id, b.slot_id, b.license_plate, b.email, b.booking_date, b.total_price, b.status, p.slot_name FROM bookings b LEFT JOIN parking_slots p ON b.slot_id = p.id ORDER BY b.id DESC", [], (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
@@ -47,6 +47,27 @@ app.get('/admin/slots', (req, res) => {
     });
 });
 
+// Endpoint na úpravu rezervácie (email a EČV)
+app.put('/admin/bookings/:id', (req, res) => {
+    const bookingId = req.params.id;
+    const { email, license_plate } = req.body;
+
+    if (!email || !license_plate) {
+        return res.status(400).json({ error: 'Email a EČV sú povinné.' });
+    }
+
+    db.run("UPDATE bookings SET email = ?, license_plate = ? WHERE id = ?", [email, license_plate, bookingId], function(err) {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Rezervácia nenájdená.' });
+        }
+        res.json({ message: `Rezervácia #${bookingId} bola úspešne upravená.` });
+    });
+});
+
+
 // Endpoint na odstránenie rezervácie
 app.delete('/admin/bookings/:id', (req, res) => {
     const bookingId = req.params.id;
@@ -56,7 +77,8 @@ app.delete('/admin/bookings/:id', (req, res) => {
             return res.status(500).json({ error: 'Chyba pri hľadaní rezervácie.' });
         }
         if (!booking) {
-            return res.status(404).json({ error: 'Rezervácia nenájdená.' });
+            // Ak rezervácia neexistuje, môžeme ju rovno považovať za "odstránenú"
+            return res.json({ message: `Rezervácia ${bookingId} už neexistuje.` });
         }
 
         db.run("DELETE FROM bookings WHERE id = ?", [bookingId], function(err) {
