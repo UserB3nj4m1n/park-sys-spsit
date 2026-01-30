@@ -1,138 +1,76 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Elementy stránky ---
-    const bookingsTableBody = document.getElementById('bookings-table-body');
-    const slotsTableBody = document.getElementById('slots-table-body');
-    
-    // --- Elementy modálneho okna ---
-    const modal = document.getElementById('edit-modal');
-    const editBookingIdInput = document.getElementById('edit-booking-id');
-    const editEmailInput = document.getElementById('edit-email');
-    const editLicensePlateInput = document.getElementById('edit-license-plate');
-    const saveButton = document.getElementById('save-edit');
-    const cancelButton = document.getElementById('cancel-edit');
+    console.log("Admin JS sa spustil.");
 
-    // --- API Funkcie ---
+    const bookingsContainer = document.getElementById('bookings-container');
+    const slotsContainer = document.getElementById('slots-container');
 
-    const api = {
-        get: (url) => fetch(url).then(res => res.json()),
-        put: (url, data) => fetch(url, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        }).then(res => res.json()),
-        delete: (url) => fetch(url, { method: 'DELETE' }).then(res => res.json())
-    };
-
-    // --- Logika Modálneho Okna ---
-
-    function openModal(booking) {
-        editBookingIdInput.value = booking.id;
-        editEmailInput.value = booking.email;
-        editLicensePlateInput.value = booking.license_plate;
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
-
-    function closeModal() {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
-
-    async function handleSaveChanges() {
-        const id = editBookingIdInput.value;
-        const data = {
-            email: editEmailInput.value,
-            license_plate: editLicensePlateInput.value
-        };
-        const result = await api.put(`/admin/bookings/${id}`, data);
-        if (result.error) {
-            alert('Chyba: ' + result.error);
-        } else {
-            closeModal();
-            loadData();
-        }
-    }
-
-    // --- Logika Načítania a Vykreslenia Dát ---
-
-    async function renderBookings() {
-        const bookings = await api.get('/admin/bookings');
-        bookingsTableBody.innerHTML = '';
-        if (!bookings || bookings.length === 0) {
-            bookingsTableBody.innerHTML = '<tr><td colspan="5" class="text-center py-4">Nenašli sa žiadne rezervácie.</td></tr>';
-            return;
-        }
-        bookings.forEach(booking => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${booking.id}</td>
-                <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${booking.license_plate}</td>
-                <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${booking.email}</td>
-                <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">
-                    <span class="relative inline-block px-3 py-1 font-semibold ${booking.status === 'confirmed' ? 'text-green-900' : 'text-red-900'} leading-tight">
-                        <span aria-hidden="true" class="absolute inset-0 ${booking.status === 'confirmed' ? 'bg-green-200' : 'bg-red-200'} opacity-50 rounded-full"></span>
-                        <span class="relative">${booking.status}</span>
-                    </span>
-                </td>
-                <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">
-                    <button class="text-blue-600 hover:text-blue-900" data-action="edit">Upraviť</button>
-                    <button class="text-indigo-600 hover:text-indigo-900 ml-4" data-action="toggle-status">Zmeniť stav</button>
-                    <button class="text-red-600 hover:text-red-900 ml-4" data-action="delete">Odstrániť</button>
-                </td>
+    async function fetchData() {
+        console.log("Načítavam dáta...");
+        try {
+            // Načítanie rezervácií
+            const bookingsRes = await fetch('/admin/bookings');
+            if (!bookingsRes.ok) throw new Error('Nepodarilo sa načítať rezervácie');
+            const bookings = await bookingsRes.json();
+            
+            bookingsContainer.innerHTML = ''; // Vyčistiť "Načítavam..."
+            const bookingsTable = document.createElement('table');
+            bookingsTable.className = 'min-w-full';
+            bookingsTable.innerHTML = `
+                <thead><tr>
+                    <th class="px-5 py-3 border-b-2 text-left">ID</th>
+                    <th class="px-5 py-3 border-b-2 text-left">EČV</th>
+                    <th class="px-5 py-3 border-b-2 text-left">Email</th>
+                    <th class="px-5 py-3 border-b-2 text-left">Stav</th>
+                </tr></thead>
             `;
-            bookingsTableBody.appendChild(row);
-
-            row.addEventListener('click', async (e) => {
-                const action = e.target.dataset.action;
-                if (action === 'edit') {
-                    openModal(booking);
-                } else if (action === 'toggle-status') {
-                    if (confirm(`Naozaj chcete zmeniť stav rezervácie #${booking.id}?`)) {
-                        await api.put(`/admin/bookings/${booking.id}/status`, { newStatus: booking.status === 'confirmed' ? 'cancelled' : 'confirmed' });
-                        loadData();
-                    }
-                } else if (action === 'delete') {
-                    if (confirm(`Naozaj chcete natrvalo odstrániť rezerváciu #${booking.id}?`)) {
-                        await api.delete(`/admin/bookings/${booking.id}`);
-                        loadData();
-                    }
-                }
+            const bookingsTbody = document.createElement('tbody');
+            bookings.forEach(b => {
+                bookingsTbody.innerHTML += `
+                    <tr>
+                        <td class="px-5 py-5 border-b">${b.id}</td>
+                        <td class="px-5 py-5 border-b">${b.license_plate}</td>
+                        <td class="px-5 py-5 border-b">${b.email}</td>
+                        <td class="px-5 py-5 border-b">${b.status}</td>
+                    </tr>`;
             });
-        });
-    }
+            bookingsTable.appendChild(bookingsTbody);
+            bookingsContainer.appendChild(bookingsTable);
+            console.log("Rezervácie načítané.");
 
-    async function renderSlots() {
-        const slots = await api.get('/admin/slots');
-        slotsTableBody.innerHTML = '';
-        if (!slots || slots.length === 0) {
-            slotsTableBody.innerHTML = '<tr><td colspan="3" class="text-center py-4">Nenašli sa žiadne parkovacie miesta.</td></tr>';
-            return;
-        }
-        slots.forEach(slot => {
-            slotsTableBody.innerHTML += `
-                <tr>
-                    <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${slot.id}</td>
-                    <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">${slot.slot_name}</td>
-                    <td class="px-5 py-5 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">
-                        <span class="relative inline-block px-3 py-1 font-semibold ${slot.status === 'available' ? 'text-green-900' : 'text-yellow-900'} leading-tight">
-                            <span aria-hidden="true" class="absolute inset-0 ${slot.status === 'available' ? 'bg-green-200' : 'bg-yellow-200'} opacity-50 rounded-full"></span>
-                            <span class="relative">${slot.status}</span>
-                        </span>
-                    </td>
-                </tr>
+            // Načítanie parkovacích miest
+            const slotsRes = await fetch('/admin/slots');
+            if (!slotsRes.ok) throw new Error('Nepodarilo sa načítať parkovacie miesta');
+            const slots = await slotsRes.json();
+            
+            slotsContainer.innerHTML = ''; // Vyčistiť "Načítavam..."
+            const slotsTable = document.createElement('table');
+            slotsTable.className = 'min-w-full';
+            slotsTable.innerHTML = `
+                <thead><tr>
+                    <th class="px-5 py-3 border-b-2 text-left">ID</th>
+                    <th class="px-5 py-3 border-b-2 text-left">Názov miesta</th>
+                    <th class="px-5 py-3 border-b-2 text-left">Stav</th>
+                </tr></thead>
             `;
-        });
-    }
-    
-    // --- Inicializácia ---
+            const slotsTbody = document.createElement('tbody');
+            slots.forEach(s => {
+                slotsTbody.innerHTML += `
+                    <tr>
+                        <td class="px-5 py-5 border-b">${s.id}</td>
+                        <td class="px-5 py-5 border-b">${s.slot_name}</td>
+                        <td class="px-5 py-5 border-b">${s.status}</td>
+                    </tr>`;
+            });
+            slotsTable.appendChild(slotsTbody);
+            slotsContainer.appendChild(slotsTable);
+            console.log("Miesta načítané.");
 
-    function loadData() {
-        renderBookings();
-        renderSlots();
+        } catch (error) {
+            console.error("Fatálna chyba pri načítaní dát:", error);
+            bookingsContainer.innerHTML = `<p class="text-red-500">Chyba: ${error.message}</p>`;
+            slotsContainer.innerHTML = `<p class="text-red-500">Chyba: ${error.message}</p>`;
+        }
     }
 
-    cancelButton.addEventListener('click', closeModal);
-    saveButton.addEventListener('click', handleSaveChanges);
-    
-    loadData();
+    fetchData();
 });
