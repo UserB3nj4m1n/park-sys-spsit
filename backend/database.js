@@ -45,7 +45,6 @@ db.serialize(() => {
     const slots = [
         { name: 'A1', level: 'A'},
         { name: 'A2', level: 'A'},
-        { name: 'A3', level: 'A'},
         { name: 'B1', level: 'B'},
         { name: 'B2', level: 'B'},
     ];
