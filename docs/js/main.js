@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Premenné, čo si pamätajú stav stránky ---
     let allSlots = [];
     let selectedSlot = null;
-    const pricePerHour = 5;
+    const pricePerHour = 2;
 
     // --- Funkcie, čo sa spustia na začiatku ---
     function initialize() {
