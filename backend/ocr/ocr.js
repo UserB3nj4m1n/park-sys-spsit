@@ -1,12 +1,41 @@
 const { createWorker } = require('tesseract.js');
+const sharp = require('sharp');
+const fs = require('fs'); // Node.js file system module
 
-async function recognizeLicensePlate(imagePath) {
-  const worker = await createWorker('eng');
-  const ret = await worker.recognize(imagePath);
-  const cleanedText = ret.data.text.replace(/[^A-PR-Z0-9]/g, "");
-  console.log(cleanedText);
-  await worker.terminate();
-  return cleanedText;
+async function recognizeText(imagePath) {
+  const worker = await createWorker('eng'); // 'eng' for English language
+  await worker.setParameters({
+    tessedit_pageseg_mode: 7, // PSM_SINGLE_LINE
+    tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', // Whitelist alphanumeric characters for license plates
+  });
+
+  let processedImageBuffer;
+  try {
+    const image = sharp(imagePath);
+    processedImageBuffer = await image
+      .flop() // Flip the image vertically
+      .grayscale() // Convert to grayscale
+      .linear(1.5, 0) // Increase contrast
+      .toBuffer();
+    
+    // Save the processed image
+    fs.writeFileSync('processed_image.jpg', processedImageBuffer);
+    console.log('Processed image saved to processed_image.jpg');
+
+  } catch (sharpError) {
+    console.error('Error during image pre-processing with sharp:', sharpError);
+    await worker.terminate();
+    return null;
+  }
+
+  try {
+    const { data: { text } } = await worker.recognize(processedImageBuffer); // Pass the buffer
+    await worker.terminate();
+    return text;
+  } catch (tesseractError) {
+    await worker.terminate();
+    console.error('Error during OCR with Tesseract:', tesseractError);
+    return null;
+  }
 }
-
-module.exports = { recognizeLicensePlate };
+module.exports = recognizeText;

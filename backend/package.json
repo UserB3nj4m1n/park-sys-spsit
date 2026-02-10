@@ -29,6 +29,7 @@
     "express": "^5.2.1",
     "multer": "^2.0.2",
     "nodemailer": "^7.0.13",
+    "sharp": "^0.34.5",
     "sqlite3": "^5.1.7",
     "tesseract.js": "^6.0.1"
   },

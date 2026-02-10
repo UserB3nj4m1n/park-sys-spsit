@@ -1,5 +1,5 @@
 // Súbor: backend/services/ocrService.js
-const { recognizeLicensePlate: ocrRecognize } = require('../ocr/ocr.js'); 
+const ocrRecognize = require('../ocr/ocr.js'); 
 
 async function recognizeLicensePlate(imagePath) {
   try {
