@@ -16,7 +16,7 @@ async function recognizeText(imagePath) {
       .rotate(180) // Rotate the image 180 degrees
       .flop() // Flip the image horizontally
       .grayscale() // Convert to grayscale
-      .linear(1.5, 0) // Increase contrast
+      .linear(1, 0) // Increase contrast
       .toBuffer();
     
     // Save the processed image
