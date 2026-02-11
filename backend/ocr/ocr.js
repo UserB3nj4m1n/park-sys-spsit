@@ -13,7 +13,7 @@ async function recognizeText(imagePath) {
   try {
     const image = sharp(imagePath);
     processedImageBuffer = await image
-      .flop() // Flip the image vertically
+      .rotate(180) // Rotate the image 180 degrees
       .grayscale() // Convert to grayscale
       .linear(1.5, 0) // Increase contrast
       .toBuffer();
