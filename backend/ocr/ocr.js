@@ -50,7 +50,8 @@ async function recognizeText(imagePath) {
   try {
     const { data: { text } } = await worker.recognize(processedImageBuffer);
     await worker.terminate();
-    return text.trim();
+    const processedText = text.replace(/\s/g, '').substring(0, 7);
+    return processedText;
   } catch (tesseractError) {
     console.error('Error during OCR:', tesseractError);
     await worker.terminate();

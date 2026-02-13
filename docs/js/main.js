@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function validateLicensePlate(plate) {
         if (!plate) return "EČV je povinné.";
         const regex = /^[A-Z0-9-]{5,8}$/;
-        if (!regex.test(plate.toUpperCase())) return "Neplatný formát EČV (napr. KE-123AB).";
+        if (!regex.test(plate.toUpperCase())) return "Neplatný formát EČV (napr. KE123AB).";
         return null;
     }
 
