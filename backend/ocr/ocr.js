@@ -19,18 +19,13 @@ async function recognizeText(imagePath) {
 
     processedImageBuffer = await image
       .rotate(180) 
-      .flop()      
+      .flop()   
       .extract({ 
         left: 0, 
         top: halfHeight,
         width: metadata.width, 
         height: metadata.height - halfHeight 
-      })
-      .resize(1000) // 1. Upscale: Bigger letters = better recognition
-      .grayscale()
-      .sharpen({ sigma: 2 }) // 2. Sharpen: Defines the edges of that 'C'
-      .modulate({ brightness: 1.2, contrast: 2 }) // 3. Boost contrast: Separates text from metal
-      .threshold(100) // 4. Threshold: Adjust this between 130-150
+      })   
       .toBuffer();
     
     fs.writeFileSync('processed_image.jpg', processedImageBuffer);
