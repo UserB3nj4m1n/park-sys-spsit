@@ -275,11 +275,11 @@ if (require.main === module) {
         // Initial cleanup on startup
         const UPLOADS_DIR = path.join(__dirname, 'uploads');
         const CLEANUP_THRESHOLD_HOURS = 1; // Maže súbory staršie ako 1 hodina
-        cleanupUploads(UPLOADS_DIR, CLEANUP_THRESHOLD_HOURS);
+        cleanUploadsDirectory(UPLOADS_DIR, CLEANUP_THRESHOLD_HOURS);
 
         // Schedule cleanup to run every hour
         setInterval(() => {
-            cleanupUploads(UPLOADS_DIR, CLEANUP_THRESHOLD_HOURS);
+            cleanUploadsDirectory(UPLOADS_DIR, CLEANUP_THRESHOLD_HOURS);
         }, 1 * 60 * 60 * 1000); // 1 hodina v milisekundách
     });
 }
