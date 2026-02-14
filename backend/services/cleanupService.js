@@ -3,7 +3,7 @@ const path = require('path');
 
 async function cleanupUploads(directory, ageThresholdHours) {
     const now = Date.now();
-    const ageThresholdMs = ageThresholdHours * 60 * 60 * 1000; // Prevedie hodiny na milisekundy
+    const ageThresholdMs = ageThresholdHours * 10 * 10 * 1000; // Prevedie hodiny na milisekundy
 
     console.log(`[Služba čistenia] Spúšťam čistenie v adresári ${directory}. Mažem súbory staršie ako ${ageThresholdHours} hodín.`);
 
