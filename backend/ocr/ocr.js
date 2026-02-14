@@ -43,6 +43,7 @@ async function recognizeText(imagePath) {
 
   try {
     const base64Image = processedImageBuffer.toString('base64');
+    console.log('Base64 image length:', base64Image.length); // Debugging line
     const apiUrl = 'https://api.platerecognizer.com/v1/plate-reader/';
 
     const params = {
@@ -52,8 +53,8 @@ async function recognizeText(imagePath) {
 
     const config = {
       headers: {
-        'Authorization': `Token ${PLATE_RECOGNIZER_API_KEY}`,
-        'Content-Type': 'application/json' // Explicitly set content type for base64 image
+        'Authorization': `Token ${PLATE_RECOGNIZER_API_KEY}`
+        // Removed 'Content-Type': 'application/json' to let Axios infer
       },
       params: {
         // Optional: Specify country if needed, e.g., 'country': 'sk' for Slovakia
@@ -63,7 +64,7 @@ async function recognizeText(imagePath) {
     };
 
     const data = {
-      image_base64: base64Image
+      upload: base64Image
     };
 
     const response = await axios.post(apiUrl, data, config);
