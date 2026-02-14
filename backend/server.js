@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, '../docs')));
 
 // Skontroluje, či existuje priečinok 'uploads', a ak nie, tak ho vytvorí
 const fs = require('fs');
-const uploadsDir = './uploads';
+const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)){
     fs.mkdirSync(uploadsDir);
 }
@@ -53,7 +53,7 @@ async function cleanUploadsDirectory(directory, ageThresholdHours) {
 // --- Konfigurácia nahrávania súborov (Multer) ---
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/');
+    cb(null, uploadsDir);
   },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
