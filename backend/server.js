@@ -6,6 +6,8 @@ const multer = require('multer');
 const path = require('path');
 const crypto = require('crypto');
 
+const { cleanupUploads } = require('./services/cleanupService');
+
 const app = express();
 const port = 3000;
 
@@ -14,14 +16,14 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../docs')));
 
 
-// Skontrolujem, či existuje priečinok 'uploads', a ak nie, tak ho vytvorím
+// Skontroluje, či existuje priečinok 'uploads', a ak nie, tak ho vytvorí
 const fs = require('fs');
 const uploadsDir = './uploads';
 if (!fs.existsSync(uploadsDir)){
     fs.mkdirSync(uploadsDir);
 }
 
-// --- Nastavenie pre nahrávanie súborov (Multer) ---
+// --- Konfigurácia nahrávania súborov (Multer) ---
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
@@ -52,19 +54,19 @@ app.get('/api/slots', (req, res) => {
     });
 });
 
-// Jednoduchá kontrola správnosti ŠPZ
+// Jednoduchá kontrola správnosti EČV (Evidenčné Číslo Vozidla)
 function isValidLicensePlate(plate) {
     const regex = /^[a-zA-Z0-9-]{5,8}$/;
     return regex.test(plate);
 }
 
-// Endpoint pre ESP32, kde pošle fotku na kontrolu rezervácie
+// Koncový bod pre ESP32, kde pošle fotku na kontrolu rezervácie
 app.post('/api/check-reservation', bodyParser.raw({ type: '*/*', limit: '10mb' }), async (req, res) => {
     if (!req.body || req.body.length === 0) {
         return res.status(400).json({ sprava: 'Žiadny obrázok nebol nahraný.' });
     }
 
-    // Obrázok, čo prišiel z kamery, si uložím do súboru
+    // Obrázok, ktorý prišiel z kamery, sa uloží do súboru
     const imagePath = path.join(uploadsDir, `esp32-cam-${Date.now()}.jpg`);
     fs.writeFile(imagePath, req.body, async (err) => {
         if (err) {
@@ -72,12 +74,12 @@ app.post('/api/check-reservation', bodyParser.raw({ type: '*/*', limit: '10mb' }
             return res.status(500).json({ sprava: 'Chyba pri ukladaní obrázka.' });
         }
 
-        console.log(`Prišla fotka z kamery na kontrolu, uložil som ju do: ${imagePath}`);
+        console.log(`Prišla fotka z kamery na kontrolu, uložila sa do: ${imagePath}`);
         
         try {
             const licensePlate = await recognizeLicensePlate(imagePath);
             if (!licensePlate) {
-                return res.status(400).json({ sprava: 'Nepodarilo sa rozpoznať ŠPZ.' });
+                return res.status(400).json({ sprava: 'Nepodarilo sa rozpoznať EČV.' });
             }
 
             const today = new Date().toISOString().slice(0, 10);
@@ -90,12 +92,12 @@ app.post('/api/check-reservation', bodyParser.raw({ type: '*/*', limit: '10mb' }
                 }
 
                 if (row) {
-                    console.log(`Super, našiel som rezerváciu pre ŠPZ: ${licensePlate}`);
+                    console.log(`Rezervácia pre EČV: ${licensePlate} nájdená.`);
                     barrierCommand = 'open';
-                    res.status(200).json({ sprava: 'Rezervácia nájdená. Príkaz na otvorenie rampy bol pripravený.' });
+                    res.status(200).json({ sprava: 'Rezervácia nájdená. Príkaz na otvorenie závory bol pripravený.' });
                 } else {
-                    console.log(`Nenašiel som dnešnú rezerváciu pre ŠPZ: ${licensePlate}`);
-                    res.status(404).json({ sprava: 'Žiadna rezervácia pre túto ŠPZ na dnes nebola nájdená.' });
+                    console.log(`Dnešná rezervácia pre EČV: ${licensePlate} nebola nájdená.`);
+                    res.status(404).json({ sprava: 'Žiadna rezervácia pre toto EČV na dnes nebola nájdená.' });
                 }
             });
         } catch (error) {
@@ -105,7 +107,7 @@ app.post('/api/check-reservation', bodyParser.raw({ type: '*/*', limit: '10mb' }
     });
 });
 
-// Endpoint, kam frontend posiela dáta z formulára na vytvorenie rezervácie
+// Koncový bod, kam frontend posiela dáta z formulára na vytvorenie rezervácie
 app.post('/api/bookings', (req, res) => {
     const { 
         slotId, licensePlate, email, cardholderName, cardNumber, cardExpDate, cardCvv, 
@@ -116,7 +118,7 @@ app.post('/api/bookings', (req, res) => {
         return res.status(400).json({ sprava: 'Všetky polia pre rezerváciu sú povinné.' });
     }
     if (!isValidLicensePlate(licensePlate)) {
-        return res.status(400).json({ sprava: 'Neplatný formát ŠPZ.' });
+        return res.status(400).json({ sprava: 'Neplatný formát EČV.' });
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return res.status(400).json({ sprava: 'Neplatný formát emailu.' });
@@ -149,7 +151,7 @@ app.post('/api/bookings', (req, res) => {
 
             db.get("SELECT slot_name FROM parking_slots WHERE id = ?", [slotId], (err, slot) => {
                 if (err || !slot) {
-                    console.error('Nepodarilo sa nájsť miesto, ku ktorému poslať email.');
+                    console.error('Nepodarilo sa nájsť miesto, ku ktorému poslať e-mail.');
                 } else {
                     sendBookingConfirmation({
                         email, 
@@ -162,7 +164,7 @@ app.post('/api/bookings', (req, res) => {
                         slot_name: slot.slot_name,
                         cardholderName
                     }).catch(emailError => {
-                        console.error("Nepodarilo sa odoslať potvrdzovací email:", emailError);
+                        console.error("Nepodarilo sa odoslať potvrdzovací e-mail:", emailError);
                     });
                 }
             });
@@ -172,7 +174,8 @@ app.post('/api/bookings', (req, res) => {
     });
 });
 
-// Endpoint na nutene OTVORENIE závory (len na testovanie)
+
+// Koncový bod na vynútené OTVORENIE závory (len na testovanie)
 app.get('/api/debug/open-barrier', (req, res) => {
     barrierCommand = 'open';
     res.status(200).json({ sprava: 'Príkaz na otvorenie závory nastavený.' });
@@ -241,6 +244,16 @@ app.get('/api/bookings/cancel/:token', (req, res) => {
 if (require.main === module) {
     app.listen(port, () => {
         console.log(`Server beží na adrese http://localhost:${port}`);
+
+        // Initial cleanup on startup
+        const UPLOADS_DIR = path.join(__dirname, 'uploads');
+        const CLEANUP_THRESHOLD_HOURS = 24; // Delete files older than 24 hours
+        cleanupUploads(UPLOADS_DIR, CLEANUP_THRESHOLD_HOURS);
+
+        // Schedule cleanup to run every 6 hours
+        setInterval(() => {
+            cleanupUploads(UPLOADS_DIR, CLEANUP_THRESHOLD_HOURS);
+        }, 6 * 60 * 60 * 1000); // 6 hours in milliseconds
     });
 }
 
