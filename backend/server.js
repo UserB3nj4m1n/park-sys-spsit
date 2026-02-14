@@ -6,8 +6,6 @@ const multer = require('multer');
 const path = require('path');
 const crypto = require('crypto');
 
-const { cleanupUploads } = require('./services/cleanupService');
-
 const app = express();
 const port = 3000;
 
@@ -21,6 +19,35 @@ const fs = require('fs');
 const uploadsDir = './uploads';
 if (!fs.existsSync(uploadsDir)){
     fs.mkdirSync(uploadsDir);
+}
+// --- Pomocná funkcia na čistenie adresára 'uploads' ---
+async function cleanUploadsDirectory(directory, ageThresholdHours) {
+    const now = Date.now();
+    const ageThresholdMs = ageThresholdHours * 60 * 60 * 1000;
+
+    console.log(`[Služba čistenia] Spúšťam čistenie v adresári ${directory}. Mažem súbory staršie ako ${ageThresholdHours} hodín.`);
+
+    try {
+        const files = await fs.promises.readdir(directory);
+
+        for (const file of files) {
+            const filePath = path.join(directory, file);
+            try {
+                const stats = await fs.promises.stat(filePath);
+                if (stats.isFile()) {
+                    if ((now - stats.mtime.getTime()) > ageThresholdMs) {
+                        await fs.promises.unlink(filePath);
+                        console.log(`[Služba čistenia] Starý súbor vymazaný: ${filePath}`);
+                    }
+                }
+            } catch (fileError) {
+                console.error(`[Služba čistenia] Chyba pri spracovaní súboru ${filePath}:`, fileError);
+            }
+        }
+        console.log(`[Služba čistenia] Čistenie dokončené.`);
+    } catch (dirError) {
+        console.error(`[Služba čistenia] Chyba pri čítaní adresára ${directory}:`, dirError);
+    }
 }
 
 // --- Konfigurácia nahrávania súborov (Multer) ---
@@ -247,13 +274,13 @@ if (require.main === module) {
 
         // Initial cleanup on startup
         const UPLOADS_DIR = path.join(__dirname, 'uploads');
-        const CLEANUP_THRESHOLD_HOURS = 24; // Delete files older than 24 hours
+        const CLEANUP_THRESHOLD_HOURS = 1; // Maže súbory staršie ako 1 hodina
         cleanupUploads(UPLOADS_DIR, CLEANUP_THRESHOLD_HOURS);
 
-        // Schedule cleanup to run every 6 hours
+        // Schedule cleanup to run every hour
         setInterval(() => {
             cleanupUploads(UPLOADS_DIR, CLEANUP_THRESHOLD_HOURS);
-        }, 6 * 60 * 60 * 1000); // 6 hours in milliseconds
+        }, 1 * 60 * 60 * 1000); // 1 hodina v milisekundách
     });
 }
 
