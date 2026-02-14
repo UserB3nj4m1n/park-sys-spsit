@@ -38,22 +38,22 @@ async function recognizeText(imagePath) {
 
   try {
     const base64Image = processedImageBuffer.toString('base64');
-    console.log('Base64 image length:', base64Image.length); // Debugging line
+    console.log('Base64 image length:', base64Image.length); // Debugovací riadok
     const apiUrl = 'https://api.platerecognizer.com/v1/plate-reader/';
 
     const params = {
-      // Plate Recognizer uses headers for auth, and does not require these params for basic recognition.
-      // TopN might be relevant if multiple plates are expected, but for now we take the first.
+      // Plate Recognizer používa hlavičky pre autentifikáciu a pre základné rozpoznávanie nepotrebuje tieto parametre.
+      // TopN môže byť relevantné, ak sa očakáva viacero ŠPZ, ale zatiaľ berieme prvú.
     };
 
     const config = {
       headers: {
         'Authorization': `Token ${PLATE_RECOGNIZER_API_KEY}`
-        // Removed 'Content-Type': 'application/json' to let Axios infer
+        // Odstránený 'Content-Type': 'application/json', aby Axios inferoval typ
       },
       params: {
-        // Optional: Specify country if needed, e.g., 'country': 'sk' for Slovakia
-        'regions': 'sk', // Assuming Slovakia based on previous context, can be adjusted
+        // Voliteľné: Zadajte krajinu, ak je to potrebné, napr. 'country': 'sk' pre Slovensko
+        'regions': 'sk', // Predpokladaná krajina je Slovensko na základe predchádzajúceho kontextu, možno upraviť
         'topn': 1
       }
     };
@@ -66,7 +66,7 @@ async function recognizeText(imagePath) {
 
     if (response.data && response.data.results && response.data.results.length > 0) {
       const plate = response.data.results[0].plate;
-      const processedText = plate.replace(/\s/g, '').substring(0, 7);
+      const processedText = plate.replace(/\s/g, '').substring(0, 7).toUpperCase();
       return processedText;
     } else {
       console.log('No license plates detected by Plate Recognizer.');
