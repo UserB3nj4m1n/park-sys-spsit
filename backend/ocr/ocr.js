@@ -20,12 +20,6 @@ async function recognizeText(imagePath) {
     processedImageBuffer = await image
       .rotate(180) 
       .flop()   
-      .extract({ 
-        left: 0, 
-        top: halfHeight,
-        width: metadata.width, 
-        height: metadata.height - halfHeight 
-      })   
       .toBuffer();
     
     fs.writeFileSync('processed_image.jpg', processedImageBuffer);
